@@ -6,12 +6,19 @@ import { UploadCloud, File as FileIcon, Loader2 } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 import { Input } from '../ui/input';
 import { Label } from '../ui/label';
+import { useProperties } from '@/contexts/properties-context';
 
-export default function FloorPlanUploader() {
+interface FloorPlanUploaderProps {
+  propertyId: string;
+  onUploadSuccess?: () => void;
+}
+
+export default function FloorPlanUploader({ propertyId, onUploadSuccess }: FloorPlanUploaderProps) {
   const [file, setFile] = useState<File | null>(null);
   const [name, setName] = useState('');
   const [isUploading, setIsUploading] = useState(false);
   const { toast } = useToast();
+  const { addFloorPlan } = useProperties();
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files) {
@@ -33,7 +40,9 @@ export default function FloorPlanUploader() {
     };
 
     setIsUploading(true);
-    // Mock upload
+    addFloorPlan(propertyId, { name, file });
+    
+    // Mock upload time
     setTimeout(() => {
       setIsUploading(false);
       toast({
@@ -42,6 +51,7 @@ export default function FloorPlanUploader() {
       });
       setFile(null);
       setName('');
+      onUploadSuccess?.();
     }, 1500);
   };
 

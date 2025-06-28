@@ -18,11 +18,13 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 import RequestChangesForm from '@/components/dashboard/request-changes-form';
+import { useState } from 'react';
 
 export default function PropertyDetailPage() {
   const params = useParams<{ id: string }>();
   const { properties } = useProperties();
   const property = properties.find((p) => p.id === params.id);
+  const [isUploadDialogOpen, setIsUploadDialogOpen] = useState(false);
 
   if (!property) {
     notFound();
@@ -106,7 +108,7 @@ export default function PropertyDetailPage() {
                     <CardTitle>Floor Plans</CardTitle>
                     <CardDescription>Manage the property's floor plans.</CardDescription>
                 </div>
-                <Dialog>
+                <Dialog open={isUploadDialogOpen} onOpenChange={setIsUploadDialogOpen}>
                     <DialogTrigger asChild>
                         <Button><PlusCircle className="mr-2 h-4 w-4" /> Add Floor Plan</Button>
                     </DialogTrigger>
@@ -117,7 +119,7 @@ export default function PropertyDetailPage() {
                                 Select a new image (JPEG) or PDF file and give it a name.
                             </DialogDescription>
                         </DialogHeader>
-                        <FloorPlanUploader />
+                        <FloorPlanUploader propertyId={property.id} onUploadSuccess={() => setIsUploadDialogOpen(false)} />
                     </DialogContent>
                 </Dialog>
             </CardHeader>
