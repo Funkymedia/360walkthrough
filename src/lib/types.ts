@@ -4,6 +4,12 @@ export interface PropertyImage {
   tags: string[];
 }
 
+export interface FloorPlan {
+  id: string;
+  name: string;
+  url: string;
+}
+
 export interface Property {
   id: string;
   name: string;
@@ -15,7 +21,7 @@ export interface Property {
     phone: string;
   };
   images: PropertyImage[];
-  floorPlanUrl?: string;
+  floorPlans?: FloorPlan[];
 }
 
 export interface User {

@@ -22,7 +22,10 @@ export const mockProperties: Property[] = [
       { id: 'img-1-1', url: 'https://placehold.co/800x400.png', tags: ['living room', 'modern', 'city view'] },
       { id: 'img-1-2', url: 'https://placehold.co/800x400.png', tags: ['kitchen', 'granite worktops', 'stainless steel'] },
     ],
-    floorPlanUrl: 'https://placehold.co/800x600.png',
+    floorPlans: [
+      { id: 'fp-1-1', name: 'Ground Floor', url: 'https://placehold.co/800x600.png' },
+      { id: 'fp-1-2', name: 'First Floor', url: 'https://placehold.co/800x600.pdf' }
+    ],
   },
   {
     id: 'prop-2',
@@ -37,6 +40,7 @@ export const mockProperties: Property[] = [
     images: [
       { id: 'img-2-1', url: 'https://placehold.co/800x400.png', tags: ['exterior', 'suburban', 'brick'] },
     ],
+    floorPlans: [],
   },
   {
     id: 'prop-3',
@@ -49,6 +53,8 @@ export const mockProperties: Property[] = [
       phone: '555-555-5555',
     },
     images: [],
-    floorPlanUrl: 'https://placehold.co/800x600.png',
+    floorPlans: [
+        { id: 'fp-3-1', name: 'Main Floor', url: 'https://placehold.co/800x600.png' }
+    ],
   },
 ];
