@@ -2,7 +2,7 @@ import Link from 'next/link';
 import Image from 'next/image';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { UploadCloud, Sparkles, Building, PanelTop, Check, Orbit } from 'lucide-react';
+import { UploadCloud, Sparkles, Building, PanelTop, Check, Orbit, Camera } from 'lucide-react';
 import Logo from '@/components/Logo';
 
 export default function LandingPage() {
@@ -169,6 +169,41 @@ export default function LandingPage() {
         </section>
 
         <section className="py-20 md:py-24">
+          <div className="container mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="grid grid-cols-1 items-center gap-12 md:grid-cols-2">
+              <div className="order-2 md:order-1">
+                <h2 className="text-3xl md:text-4xl font-bold mb-4">Official RICOH 360 Supplier</h2>
+                <p className="text-muted-foreground mb-6">
+                  As an official supplier of RICOH 360 cameras, we provide the best equipment for creating stunning virtual tours. Get the right gear to capture immersive, high-quality imagery for your properties.
+                </p>
+                 <ul className="grid grid-cols-1 gap-x-8 gap-y-4 text-muted-foreground sm:grid-cols-2 mb-8">
+                    <li className="flex items-center gap-3"><Check className="h-5 w-5 text-primary" /> Latest RICOH models</li>
+                    <li className="flex items-center gap-3"><Check className="h-5 w-5 text-primary" /> Competitive Pricing</li>
+                    <li className="flex items-center gap-3"><Check className="h-5 w-5 text-primary" /> Expert Support</li>
+                    <li className="flex items-center gap-3"><Check className="h-5 w-5 text-primary" /> Fast UK Shipping</li>
+                </ul>
+                <Button asChild>
+                  <Link href="#">
+                    <Camera className="mr-2 h-4 w-4" />
+                    Shop Cameras
+                  </Link>
+                </Button>
+              </div>
+              <div className="order-1 md:order-2">
+                <Image
+                  src="https://placehold.co/600x500.png"
+                  alt="RICOH 360 camera"
+                  width={600}
+                  height={500}
+                  className="rounded-lg shadow-xl"
+                  data-ai-hint="RICOH 360 camera"
+                />
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section className="bg-white py-20 md:py-24">
           <div className="container mx-auto px-4 sm:px-6 lg:px-8 text-center">
             <h2 className="text-3xl md:text-4xl font-bold text-primary">Ready to Create Your First Tour?</h2>
             <p className="max-w-2xl mx-auto text-muted-foreground mt-4 mb-8">
