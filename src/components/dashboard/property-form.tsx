@@ -30,7 +30,7 @@ interface PropertyFormProps {
 
 export default function PropertyForm({ initialData }: PropertyFormProps) {
   const router = useRouter();
-  const { addProperty } = useProperties();
+  const { addProperty, updateProperty } = useProperties();
   const [isLoading, setIsLoading] = useState(false);
   const form = useForm<PropertyFormValues>({
     resolver: zodResolver(propertySchema),
@@ -46,14 +46,22 @@ export default function PropertyForm({ initialData }: PropertyFormProps) {
 
   const onSubmit = (data: PropertyFormValues) => {
     setIsLoading(true);
-    console.log('Form submitted:', data);
-    addProperty(data);
+    if (initialData) {
+      updateProperty(initialData.id, data);
+    } else {
+      addProperty(data);
+    }
 
     // Mock API delay
     setTimeout(() => {
       setIsLoading(false);
       // Redirect to the dashboard to see the new property in the list.
-      router.push('/dashboard');
+      if (initialData) {
+        router.push(`/dashboard/properties/${initialData.id}`);
+        router.refresh();
+      } else {
+        router.push('/dashboard/properties');
+      }
     }, 1500);
   };
 

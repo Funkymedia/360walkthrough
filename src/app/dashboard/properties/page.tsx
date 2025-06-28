@@ -61,7 +61,11 @@ export default function PropertiesPage() {
           <TableBody>
             {properties.map((property) => (
               <TableRow key={property.id}>
-                <TableCell className="font-medium">{property.name}</TableCell>
+                <TableCell className="font-medium">
+                  <Link href={`/dashboard/properties/${property.id}`} className="hover:underline">
+                    {property.name}
+                  </Link>
+                </TableCell>
                 <TableCell>{property.address}</TableCell>
                 <TableCell className="hidden md:table-cell">
                   {property.images.length}
@@ -79,7 +83,9 @@ export default function PropertiesPage() {
                       <DropdownMenuItem asChild>
                         <Link href={`/dashboard/properties/${property.id}`}>View Details</Link>
                       </DropdownMenuItem>
-                      <DropdownMenuItem>Edit</DropdownMenuItem>
+                      <DropdownMenuItem asChild>
+                        <Link href={`/dashboard/properties/${property.id}/edit`}>Edit</Link>
+                      </DropdownMenuItem>
                       <DropdownMenuItem className="text-destructive">Delete</DropdownMenuItem>
                     </DropdownMenuContent>
                   </DropdownMenu>

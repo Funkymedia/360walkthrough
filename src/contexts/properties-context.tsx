@@ -10,6 +10,7 @@ export type FloorPlanFormValues = { name: string; file: File };
 interface PropertiesContextType {
     properties: Property[];
     addProperty: (propertyData: PropertyFormValues) => void;
+    updateProperty: (propertyId: string, propertyData: PropertyFormValues) => void;
     addFloorPlan: (propertyId: string, floorPlanData: FloorPlanFormValues) => void;
     deleteFloorPlan: (propertyId: string, floorPlanId: string) => void;
     addImage: (propertyId: string, imageFile: File) => Promise<PropertyImage>;
@@ -37,6 +38,27 @@ export function PropertiesProvider({ children }: { children: ReactNode }) {
             floorPlans: [],
         };
         setProperties(prev => [newProperty, ...prev]);
+    };
+
+    const updateProperty = (propertyId: string, data: PropertyFormValues) => {
+        setProperties(prev =>
+            prev.map(p => {
+                if (p.id === propertyId) {
+                    return {
+                        ...p,
+                        name: data.name,
+                        address: data.address,
+                        description: data.description,
+                        contact: {
+                            name: data.contactName,
+                            email: data.contactEmail,
+                            phone: data.contactPhone,
+                        },
+                    };
+                }
+                return p;
+            })
+        );
     };
 
     const addFloorPlan = (propertyId: string, floorPlanData: FloorPlanFormValues) => {
@@ -126,7 +148,7 @@ export function PropertiesProvider({ children }: { children: ReactNode }) {
       };
 
     return (
-        <PropertiesContext.Provider value={{ properties, addProperty, addFloorPlan, deleteFloorPlan, addImage, updateImage, deleteImage }}>
+        <PropertiesContext.Provider value={{ properties, addProperty, updateProperty, addFloorPlan, deleteFloorPlan, addImage, updateImage, deleteImage }}>
             {children}
         </PropertiesContext.Provider>
     );
