@@ -4,7 +4,7 @@ import { mockProperties } from '@/lib/data';
 import { notFound } from 'next/navigation';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription, CardFooter } from '@/components/ui/card';
-import { Building, User, Phone, Mail, PlusCircle, Download, FileText } from 'lucide-react';
+import { Building, User, Phone, Mail, PlusCircle, Download, FileText, Camera } from 'lucide-react';
 import PropertyImageUploader from '@/components/dashboard/property-image-uploader';
 import FloorPlanUploader from '@/components/dashboard/floor-plan-uploader';
 import Image from 'next/image';
@@ -38,7 +38,10 @@ export default function PropertyDetailPage({ params }: { params: { id: string } 
       <Tabs defaultValue="details">
         <TabsList className="grid w-full grid-cols-3">
           <TabsTrigger value="details">Details</TabsTrigger>
-          <TabsTrigger value="images">360° Images</TabsTrigger>
+          <TabsTrigger value="images" className="font-semibold data-[state=active]:bg-primary data-[state=active]:text-primary-foreground">
+            <Camera className="mr-2 h-4 w-4" />
+            360° Images
+          </TabsTrigger>
           <TabsTrigger value="floorplan">Floor Plans</TabsTrigger>
         </TabsList>
         <TabsContent value="details" className="mt-6 space-y-6">
@@ -90,7 +93,7 @@ export default function PropertyDetailPage({ params }: { params: { id: string } 
             </CardHeader>
             <CardContent>
                 {property.floorPlans && property.floorPlans.length > 0 ? (
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
                         {property.floorPlans.map((plan) => (
                             <Card key={plan.id}>
                                 <CardHeader>
