@@ -4,7 +4,7 @@ import { useProperties } from '@/contexts/properties-context';
 import { notFound, useParams } from 'next/navigation';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription, CardFooter } from '@/components/ui/card';
-import { Building, User, Phone, Mail, PlusCircle, Download, FileText, Camera, Orbit, ExternalLink, Trash2, Pencil, Check, X } from 'lucide-react';
+import { Building, User, Phone, Mail, PlusCircle, Download, FileText, Camera, Orbit, ExternalLink, Trash2, Pencil, Check, X, Facebook, Linkedin, Instagram } from 'lucide-react';
 import PropertyImageUploader from '@/components/dashboard/property-image-uploader';
 import FloorPlanUploader from '@/components/dashboard/floor-plan-uploader';
 import Image from 'next/image';
@@ -33,6 +33,7 @@ import { useState, useEffect } from 'react';
 import { useToast } from '@/hooks/use-toast';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
 
 export default function PropertyDetailPage() {
   const params = useParams<{ id: string }>();
@@ -299,12 +300,61 @@ export default function PropertyDetailPage() {
                   ></iframe>
                 </div>
               </CardContent>
-              <CardFooter>
-                  <Button asChild className="ml-auto">
-                      <a href={property.tourUrl} target="_blank" rel="noopener noreferrer">
-                          <ExternalLink className="mr-2 h-4 w-4" /> View Fullscreen
-                      </a>
-                  </Button>
+              <CardFooter className="flex items-center justify-between">
+                <div className="flex items-center gap-2">
+                    <span className="text-sm text-muted-foreground">Share:</span>
+                    <TooltipProvider>
+                    <Tooltip>
+                        <TooltipTrigger asChild>
+                        <Button asChild variant="outline" size="icon">
+                            <a
+                            href={`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(property.tourUrl)}&quote=${encodeURIComponent(`Check out this virtual tour for ${property.name}!`)}`}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            aria-label="Share on Facebook"
+                            >
+                            <Facebook className="h-5 w-5" />
+                            </a>
+                        </Button>
+                        </TooltipTrigger>
+                        <TooltipContent>
+                        <p>Share on Facebook</p>
+                        </TooltipContent>
+                    </Tooltip>
+                    <Tooltip>
+                        <TooltipTrigger asChild>
+                        <Button asChild variant="outline" size="icon">
+                            <a
+                            href={`https://www.linkedin.com/shareArticle?mini=true&url=${encodeURIComponent(property.tourUrl)}&title=${encodeURIComponent(`Check out this virtual tour for ${property.name}!`)}`}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            aria-label="Share on LinkedIn"
+                            >
+                            <Linkedin className="h-5 w-5" />
+                            </a>
+                        </Button>
+                        </TooltipTrigger>
+                        <TooltipContent>
+                        <p>Share on LinkedIn</p>
+                        </TooltipContent>
+                    </Tooltip>
+                    <Tooltip>
+                        <TooltipTrigger asChild>
+                        <Button variant="outline" size="icon" disabled>
+                            <Instagram className="h-5 w-5" />
+                        </Button>
+                        </TooltipTrigger>
+                        <TooltipContent>
+                        <p>Direct sharing to Instagram is not supported. Please copy the link.</p>
+                        </TooltipContent>
+                    </Tooltip>
+                    </TooltipProvider>
+                </div>
+                <Button asChild>
+                    <a href={property.tourUrl} target="_blank" rel="noopener noreferrer">
+                        <ExternalLink className="mr-2 h-4 w-4" /> View Fullscreen
+                    </a>
+                </Button>
               </CardFooter>
             </Card>
           )}
@@ -418,8 +468,57 @@ export default function PropertyDetailPage() {
                 )}
             </CardContent>
             {property.tourUrl && (
-                <CardFooter>
-                    <Button asChild className="ml-auto">
+                <CardFooter className="flex items-center justify-between">
+                    <div className="flex items-center gap-2">
+                        <span className="text-sm text-muted-foreground">Share:</span>
+                        <TooltipProvider>
+                        <Tooltip>
+                            <TooltipTrigger asChild>
+                            <Button asChild variant="outline" size="icon">
+                                <a
+                                href={`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(property.tourUrl)}&quote=${encodeURIComponent(`Check out this virtual tour for ${property.name}!`)}`}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                aria-label="Share on Facebook"
+                                >
+                                <Facebook className="h-5 w-5" />
+                                </a>
+                            </Button>
+                            </TooltipTrigger>
+                            <TooltipContent>
+                            <p>Share on Facebook</p>
+                            </TooltipContent>
+                        </Tooltip>
+                        <Tooltip>
+                            <TooltipTrigger asChild>
+                            <Button asChild variant="outline" size="icon">
+                                <a
+                                href={`https://www.linkedin.com/shareArticle?mini=true&url=${encodeURIComponent(property.tourUrl)}&title=${encodeURIComponent(`Check out this virtual tour for ${property.name}!`)}`}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                aria-label="Share on LinkedIn"
+                                >
+                                <Linkedin className="h-5 w-5" />
+                                </a>
+                            </Button>
+                            </TooltipTrigger>
+                            <TooltipContent>
+                            <p>Share on LinkedIn</p>
+                            </TooltipContent>
+                        </Tooltip>
+                        <Tooltip>
+                            <TooltipTrigger asChild>
+                            <Button variant="outline" size="icon" disabled>
+                                <Instagram className="h-5 w-5" />
+                            </Button>
+                            </TooltipTrigger>
+                            <TooltipContent>
+                            <p>Direct sharing to Instagram is not supported. Please copy the link.</p>
+                            </TooltipContent>
+                        </Tooltip>
+                        </TooltipProvider>
+                    </div>
+                    <Button asChild>
                         <a href={property.tourUrl} target="_blank" rel="noopener noreferrer">
                             <ExternalLink className="mr-2 h-4 w-4" /> View Fullscreen
                         </a>
