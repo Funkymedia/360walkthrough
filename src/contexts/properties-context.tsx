@@ -11,6 +11,7 @@ interface PropertiesContextType {
     properties: Property[];
     addProperty: (propertyData: PropertyFormValues) => void;
     addFloorPlan: (propertyId: string, floorPlanData: FloorPlanFormValues) => void;
+    deleteFloorPlan: (propertyId: string, floorPlanId: string) => void;
 }
 
 const PropertiesContext = createContext<PropertiesContextType | undefined>(undefined);
@@ -55,8 +56,22 @@ export function PropertiesProvider({ children }: { children: ReactNode }) {
         );
     };
     
+    const deleteFloorPlan = (propertyId: string, floorPlanId: string) => {
+        setProperties(prev =>
+            prev.map(p => {
+                if (p.id === propertyId) {
+                    return {
+                        ...p,
+                        floorPlans: p.floorPlans?.filter(fp => fp.id !== floorPlanId),
+                    };
+                }
+                return p;
+            })
+        );
+    };
+
     return (
-        <PropertiesContext.Provider value={{ properties, addProperty, addFloorPlan }}>
+        <PropertiesContext.Provider value={{ properties, addProperty, addFloorPlan, deleteFloorPlan }}>
             {children}
         </PropertiesContext.Provider>
     );

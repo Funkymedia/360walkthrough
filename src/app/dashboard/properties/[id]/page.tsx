@@ -4,7 +4,7 @@ import { useProperties } from '@/contexts/properties-context';
 import { notFound, useParams } from 'next/navigation';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription, CardFooter } from '@/components/ui/card';
-import { Building, User, Phone, Mail, PlusCircle, Download, FileText, Camera, Orbit, ExternalLink } from 'lucide-react';
+import { Building, User, Phone, Mail, PlusCircle, Download, FileText, Camera, Orbit, ExternalLink, Trash2 } from 'lucide-react';
 import PropertyImageUploader from '@/components/dashboard/property-image-uploader';
 import FloorPlanUploader from '@/components/dashboard/floor-plan-uploader';
 import Image from 'next/image';
@@ -17,18 +17,41 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "@/components/ui/alert-dialog";
 import RequestChangesForm from '@/components/dashboard/request-changes-form';
 import { useState } from 'react';
+import { useToast } from '@/hooks/use-toast';
 
 export default function PropertyDetailPage() {
   const params = useParams<{ id: string }>();
-  const { properties } = useProperties();
+  const { properties, deleteFloorPlan } = useProperties();
+  const { toast } = useToast();
   const property = properties.find((p) => p.id === params.id);
   const [isUploadDialogOpen, setIsUploadDialogOpen] = useState(false);
 
   if (!property) {
     notFound();
   }
+
+  const handleDeleteFloorPlan = (floorPlanId: string) => {
+    if (property) {
+      deleteFloorPlan(property.id, floorPlanId);
+      toast({
+        title: "Floor Plan Deleted",
+        description: "The floor plan has been successfully removed.",
+      });
+    }
+  };
 
   return (
     <div className="space-y-6">
@@ -143,12 +166,33 @@ export default function PropertyDetailPage() {
                                     </div>
                                     )}
                                 </CardContent>
-                                <CardFooter>
-                                    <Button asChild variant="outline" className="ml-auto">
-                                    <a href={plan.url} download>
-                                        <Download className="mr-2 h-4 w-4" /> Download
-                                    </a>
+                                <CardFooter className="grid grid-cols-2 gap-2">
+                                    <Button asChild variant="outline">
+                                      <a href={plan.url} download>
+                                          <Download className="mr-2 h-4 w-4" /> Download
+                                      </a>
                                     </Button>
+                                    <AlertDialog>
+                                        <AlertDialogTrigger asChild>
+                                            <Button variant="destructive">
+                                                <Trash2 className="mr-2 h-4 w-4" /> Delete
+                                            </Button>
+                                        </AlertDialogTrigger>
+                                        <AlertDialogContent>
+                                            <AlertDialogHeader>
+                                            <AlertDialogTitle>Are you sure?</AlertDialogTitle>
+                                            <AlertDialogDescription>
+                                                This action cannot be undone. This will permanently delete the floor plan.
+                                            </AlertDialogDescription>
+                                            </AlertDialogHeader>
+                                            <AlertDialogFooter>
+                                            <AlertDialogCancel>Cancel</AlertDialogCancel>
+                                            <AlertDialogAction onClick={() => handleDeleteFloorPlan(plan.id)}>
+                                                Continue
+                                            </AlertDialogAction>
+                                            </AlertDialogFooter>
+                                        </AlertDialogContent>
+                                    </AlertDialog>
                                 </CardFooter>
                             </Card>
                         ))}
