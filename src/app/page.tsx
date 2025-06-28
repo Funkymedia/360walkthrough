@@ -185,7 +185,7 @@ export default function LandingPage() {
                 <Button asChild>
                   <Link href="#">
                     <Camera className="mr-2 h-4 w-4" />
-                    Shop Cameras
+                    Explore our camera models
                   </Link>
                 </Button>
               </div>
