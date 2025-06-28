@@ -76,7 +76,7 @@ export default function PropertyForm({ initialData }: PropertyFormProps) {
                 <FormItem>
                   <FormLabel>Property Name</FormLabel>
                   <FormControl>
-                    <Input placeholder="e.g., Modern Downtown Loft" {...field} />
+                    <Input placeholder="e.g., Modern Central London Flat" {...field} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -89,7 +89,7 @@ export default function PropertyForm({ initialData }: PropertyFormProps) {
                 <FormItem>
                   <FormLabel>Address</FormLabel>
                   <FormControl>
-                    <Input placeholder="123 Main St, Anytown, USA" {...field} />
+                    <Input placeholder="123 High St, London, SW1A 1AA" {...field} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -103,7 +103,7 @@ export default function PropertyForm({ initialData }: PropertyFormProps) {
                   <FormLabel>Description</FormLabel>
                   <FormControl>
                     <Textarea
-                      placeholder="A beautiful and spacious loft..."
+                      placeholder="A beautiful and spacious flat..."
                       className="resize-none"
                       rows={4}
                       {...field}
@@ -125,7 +125,7 @@ export default function PropertyForm({ initialData }: PropertyFormProps) {
                         <FormItem>
                         <FormLabel>Contact Name</FormLabel>
                         <FormControl>
-                            <Input placeholder="Jane Realtor" {...field} />
+                            <Input placeholder="James Agent" {...field} />
                         </FormControl>
                         <FormMessage />
                         </FormItem>
@@ -138,7 +138,7 @@ export default function PropertyForm({ initialData }: PropertyFormProps) {
                         <FormItem>
                         <FormLabel>Contact Email</FormLabel>
                         <FormControl>
-                            <Input placeholder="jane.realtor@example.com" {...field} />
+                            <Input placeholder="james.agent@example.com" {...field} />
                         </FormControl>
                         <FormMessage />
                         </FormItem>
@@ -152,7 +152,7 @@ export default function PropertyForm({ initialData }: PropertyFormProps) {
                     <FormItem>
                     <FormLabel>Contact Phone</FormLabel>
                     <FormControl>
-                        <Input placeholder="555-123-4567" {...field} />
+                        <Input placeholder="07700 900123" {...field} />
                     </FormControl>
                     <FormMessage />
                     </FormItem>
