@@ -12,6 +12,7 @@ import { Property } from '@/lib/types';
 import { Loader2 } from 'lucide-react';
 import { useState } from 'react';
 import { useProperties } from '@/contexts/properties-context';
+import Image from 'next/image';
 
 const propertySchema = z.object({
   name: z.string().min(3, 'Property name must be at least 3 characters.'),
@@ -20,6 +21,7 @@ const propertySchema = z.object({
   contactName: z.string().min(2, 'Contact name is required.'),
   contactEmail: z.string().email('Please enter a valid email.'),
   contactPhone: z.string().min(10, 'Please enter a valid phone number.'),
+  brandingLogo: z.any().optional(),
 });
 
 export type PropertyFormValues = z.infer<typeof propertySchema>;
@@ -32,6 +34,8 @@ export default function PropertyForm({ initialData }: PropertyFormProps) {
   const router = useRouter();
   const { addProperty, updateProperty } = useProperties();
   const [isLoading, setIsLoading] = useState(false);
+  const [logoPreview, setLogoPreview] = useState<string | null>(initialData?.brandingLogoUrl || null);
+
   const form = useForm<PropertyFormValues>({
     resolver: zodResolver(propertySchema),
     defaultValues: {
@@ -41,6 +45,7 @@ export default function PropertyForm({ initialData }: PropertyFormProps) {
       contactName: initialData?.contact.name || '',
       contactEmail: initialData?.contact.email || '',
       contactPhone: initialData?.contact.phone || '',
+      brandingLogo: undefined,
     },
   });
 
@@ -158,6 +163,46 @@ export default function PropertyForm({ initialData }: PropertyFormProps) {
                     </FormItem>
                 )}
                 />
+        </div>
+
+        <div className="space-y-4 rounded-lg border p-4">
+          <h3 className="text-lg font-medium">Branding</h3>
+          <p className="text-sm text-muted-foreground">
+            Upload a company logo to be used as a watermark on tours.
+          </p>
+          <FormField
+            control={form.control}
+            name="brandingLogo"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Company Logo</FormLabel>
+                <FormControl>
+                  <Input
+                    type="file"
+                    accept="image/png, image/jpeg, image/svg+xml"
+                    onChange={(event) => {
+                      const files = event.target.files;
+                      field.onChange(files);
+                      if (files && files.length > 0) {
+                        setLogoPreview(URL.createObjectURL(files[0]));
+                      } else {
+                        setLogoPreview(initialData?.brandingLogoUrl || null);
+                      }
+                    }}
+                  />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          {logoPreview && (
+            <div className="mt-4">
+              <p className="text-sm font-medium text-muted-foreground">Logo Preview:</p>
+              <div className="relative mt-2 flex h-32 w-32 items-center justify-center rounded-md border p-2">
+                <Image src={logoPreview} alt="Logo preview" fill className="object-contain" />
+              </div>
+            </div>
+          )}
         </div>
 
         <div className="flex justify-end gap-4">

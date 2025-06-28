@@ -36,6 +36,7 @@ export function PropertiesProvider({ children }: { children: ReactNode }) {
             },
             images: [],
             floorPlans: [],
+            brandingLogoUrl: data.brandingLogo?.[0] ? URL.createObjectURL(data.brandingLogo[0]) : undefined,
         };
         setProperties(prev => [newProperty, ...prev]);
     };
@@ -44,6 +45,9 @@ export function PropertiesProvider({ children }: { children: ReactNode }) {
         setProperties(prev =>
             prev.map(p => {
                 if (p.id === propertyId) {
+                    const newLogoFile = data.brandingLogo?.[0];
+                    const newLogoUrl = newLogoFile ? URL.createObjectURL(newLogoFile) : p.brandingLogoUrl;
+
                     return {
                         ...p,
                         name: data.name,
@@ -54,6 +58,7 @@ export function PropertiesProvider({ children }: { children: ReactNode }) {
                             email: data.contactEmail,
                             phone: data.contactPhone,
                         },
+                        brandingLogoUrl: newLogoUrl
                     };
                 }
                 return p;

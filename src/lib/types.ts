@@ -34,6 +34,7 @@ export interface Property {
   images: PropertyImage[];
   floorPlans?: FloorPlan[];
   tourUrl?: string;
+  brandingLogoUrl?: string;
 }
 
 export interface User {

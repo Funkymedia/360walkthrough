@@ -19,6 +19,7 @@ export const mockProperties: Property[] = [
       phone: '020 7123 4567',
     },
     tourUrl: 'https://kuula.co/share/collection/7q1vF?logo=1&info=1&fs=1&vr=0&sd=1&thumbs=1',
+    brandingLogoUrl: 'https://placehold.co/150x50.png',
     images: [
       { 
         id: 'img-1-1', 
