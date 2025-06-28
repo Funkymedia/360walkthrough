@@ -4,7 +4,7 @@ import { useProperties } from '@/contexts/properties-context';
 import { notFound, useParams } from 'next/navigation';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription, CardFooter } from '@/components/ui/card';
-import { Building, User, Phone, Mail, PlusCircle, Download, FileText, Camera, Orbit, ExternalLink, Trash2 } from 'lucide-react';
+import { Building, User, Phone, Mail, PlusCircle, Download, FileText, Camera, Orbit, ExternalLink, Trash2, Pencil, Check, X } from 'lucide-react';
 import PropertyImageUploader from '@/components/dashboard/property-image-uploader';
 import FloorPlanUploader from '@/components/dashboard/floor-plan-uploader';
 import Image from 'next/image';
@@ -29,15 +29,24 @@ import {
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
 import RequestChangesForm from '@/components/dashboard/request-changes-form';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useToast } from '@/hooks/use-toast';
+import { Input } from '@/components/ui/input';
 
 export default function PropertyDetailPage() {
   const params = useParams<{ id: string }>();
-  const { properties, deleteFloorPlan } = useProperties();
+  const { properties, deleteFloorPlan, updateProperty } = useProperties();
   const { toast } = useToast();
   const property = properties.find((p) => p.id === params.id);
   const [isUploadDialogOpen, setIsUploadDialogOpen] = useState(false);
+  const [isEditingName, setIsEditingName] = useState(false);
+  const [name, setName] = useState(property?.name || '');
+
+  useEffect(() => {
+    if (property) {
+      setName(property.name);
+    }
+  }, [property]);
 
   if (!property) {
     notFound();
@@ -53,10 +62,58 @@ export default function PropertyDetailPage() {
     }
   };
 
+  const handleNameSave = () => {
+    if (property && name.trim()) {
+      updateProperty(property.id, {
+        name: name,
+        address: property.address,
+        description: property.description,
+        contactName: property.contact.name,
+        contactEmail: property.contact.email,
+        contactPhone: property.contact.phone
+      });
+      setIsEditingName(false);
+      toast({
+        title: "Success",
+        description: "Property name has been updated."
+      });
+    } else {
+      toast({
+        variant: "destructive",
+        title: "Error",
+        description: "Property name cannot be empty."
+      });
+    }
+  };
+
   return (
     <div className="space-y-6">
       <div className="space-y-1">
-        <h1 className="text-3xl font-bold">{property.name}</h1>
+        <div className="flex min-h-[48px] items-center gap-2">
+          {isEditingName ? (
+            <div className="flex w-full items-center gap-2">
+              <Input 
+                value={name} 
+                onChange={(e) => setName(e.target.value)}
+                onKeyDown={(e) => { if (e.key === 'Enter') handleNameSave() }}
+                className="h-auto py-2 text-3xl font-bold"
+              />
+              <Button size="icon" onClick={handleNameSave}>
+                <Check className="h-5 w-5" />
+              </Button>
+              <Button size="icon" variant="ghost" onClick={() => { setIsEditingName(false); setName(property.name); }}>
+                <X className="h-5 w-5" />
+              </Button>
+            </div>
+          ) : (
+            <>
+              <h1 className="text-3xl font-bold">{property.name}</h1>
+              <Button variant="ghost" size="icon" onClick={() => setIsEditingName(true)}>
+                <Pencil className="h-4 w-4" />
+              </Button>
+            </>
+          )}
+        </div>
         <p className="flex items-center gap-2 text-muted-foreground">
           <Building className="h-4 w-4" /> {property.address}
         </p>
