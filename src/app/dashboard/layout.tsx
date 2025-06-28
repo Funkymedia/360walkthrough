@@ -17,6 +17,7 @@ import {
 } from '@/components/ui/dropdown-menu';
 import {
   Building2,
+  Gift,
   LayoutDashboard,
   LogOut,
   PlusCircle,
@@ -38,6 +39,7 @@ export default function DashboardLayout({
   const navItems = [
     { href: '/dashboard', label: 'Dashboard', icon: LayoutDashboard },
     { href: '/dashboard/properties', label: 'Properties', icon: Building2 },
+    { href: '/dashboard/referrals', label: 'Referrals', icon: Gift },
   ];
 
   return (

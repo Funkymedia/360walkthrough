@@ -12,6 +12,7 @@ import {
   LayoutDashboard,
   Building2,
   PlusCircle,
+  Gift,
 } from 'lucide-react';
 import Logo from '../Logo';
 import { usePathname } from 'next/navigation';
@@ -23,6 +24,7 @@ export default function DashboardHeader() {
   const navItems = [
     { href: '/dashboard', label: 'Dashboard', icon: LayoutDashboard },
     { href: '/dashboard/properties', label: 'Properties', icon: Building2 },
+    { href: '/dashboard/referrals', label: 'Referrals', icon: Gift },
   ];
 
   return (
