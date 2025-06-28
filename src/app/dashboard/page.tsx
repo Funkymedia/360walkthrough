@@ -1,10 +1,14 @@
-import { mockProperties } from '@/lib/data';
+'use client';
+
+import { useProperties } from '@/contexts/properties-context';
 import PropertyCard from '@/components/dashboard/property-card';
 import { Button } from '@/components/ui/button';
 import Link from 'next/link';
 import { PlusCircle } from 'lucide-react';
 
 export default function DashboardPage() {
+  const { properties } = useProperties();
+
   return (
     <div className="space-y-8">
       <div className="flex items-center justify-between">
@@ -22,9 +26,9 @@ export default function DashboardPage() {
         </Button>
       </div>
 
-      {mockProperties.length > 0 ? (
+      {properties.length > 0 ? (
         <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
-          {mockProperties.map((property) => (
+          {properties.map((property) => (
             <PropertyCard key={property.id} property={property} />
           ))}
         </div>

@@ -11,6 +11,7 @@ import { Textarea } from '@/components/ui/textarea';
 import { Property } from '@/lib/types';
 import { Loader2 } from 'lucide-react';
 import { useState } from 'react';
+import { useProperties } from '@/contexts/properties-context';
 
 const propertySchema = z.object({
   name: z.string().min(3, 'Property name must be at least 3 characters.'),
@@ -21,7 +22,7 @@ const propertySchema = z.object({
   contactPhone: z.string().min(10, 'Please enter a valid phone number.'),
 });
 
-type PropertyFormValues = z.infer<typeof propertySchema>;
+export type PropertyFormValues = z.infer<typeof propertySchema>;
 
 interface PropertyFormProps {
   initialData?: Property;
@@ -29,6 +30,7 @@ interface PropertyFormProps {
 
 export default function PropertyForm({ initialData }: PropertyFormProps) {
   const router = useRouter();
+  const { addProperty } = useProperties();
   const [isLoading, setIsLoading] = useState(false);
   const form = useForm<PropertyFormValues>({
     resolver: zodResolver(propertySchema),
@@ -45,12 +47,13 @@ export default function PropertyForm({ initialData }: PropertyFormProps) {
   const onSubmit = (data: PropertyFormValues) => {
     setIsLoading(true);
     console.log('Form submitted:', data);
-    // Mock API call
+    addProperty(data);
+
+    // Mock API delay
     setTimeout(() => {
       setIsLoading(false);
-      // Redirect to the new property's page (or property list)
-      router.push('/dashboard/properties/prop-1'); // Mock redirect
-      router.refresh();
+      // Redirect to the dashboard to see the new property in the list.
+      router.push('/dashboard');
     }, 1500);
   };
 

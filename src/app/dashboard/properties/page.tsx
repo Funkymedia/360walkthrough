@@ -1,3 +1,5 @@
+'use client';
+
 import Link from 'next/link';
 import { Button } from '@/components/ui/button';
 import {
@@ -15,7 +17,7 @@ import {
   CardHeader,
   CardTitle,
 } from '@/components/ui/card';
-import { mockProperties } from '@/lib/data';
+import { useProperties } from '@/contexts/properties-context';
 import { MoreHorizontal, PlusCircle } from 'lucide-react';
 import {
     DropdownMenu,
@@ -26,6 +28,8 @@ import {
   } from "@/components/ui/dropdown-menu"
 
 export default function PropertiesPage() {
+  const { properties } = useProperties();
+
   return (
     <Card>
       <CardHeader>
@@ -55,7 +59,7 @@ export default function PropertiesPage() {
             </TableRow>
           </TableHeader>
           <TableBody>
-            {mockProperties.map((property) => (
+            {properties.map((property) => (
               <TableRow key={property.id}>
                 <TableCell className="font-medium">{property.name}</TableCell>
                 <TableCell>{property.address}</TableCell>

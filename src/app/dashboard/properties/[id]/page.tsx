@@ -1,6 +1,6 @@
 'use client';
 
-import { mockProperties } from '@/lib/data';
+import { useProperties } from '@/contexts/properties-context';
 import { notFound, useParams } from 'next/navigation';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription, CardFooter } from '@/components/ui/card';
@@ -21,7 +21,8 @@ import RequestChangesForm from '@/components/dashboard/request-changes-form';
 
 export default function PropertyDetailPage() {
   const params = useParams<{ id: string }>();
-  const property = mockProperties.find((p) => p.id === params.id);
+  const { properties } = useProperties();
+  const property = properties.find((p) => p.id === params.id);
 
   if (!property) {
     notFound();
