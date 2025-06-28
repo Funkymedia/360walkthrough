@@ -20,7 +20,7 @@ export const mockProperties: Property[] = [
     },
     images: [
       { id: 'img-1-1', url: 'https://placehold.co/800x400.png', tags: ['living room', 'modern', 'city view'] },
-      { id: 'img-1-2', url: 'https://placehold.co/800x400.png', tags: ['kitchen', 'granite countertops', 'stainless steel'] },
+      { id: 'img-1-2', url: 'https://placehold.co/800x400.png', tags: ['kitchen', 'granite worktops', 'stainless steel'] },
     ],
     floorPlanUrl: 'https://placehold.co/800x600.png',
   },
@@ -28,7 +28,7 @@ export const mockProperties: Property[] = [
     id: 'prop-2',
     name: 'Suburban Family Home',
     address: '456 Oak Ave, Suburbia, USA 54321',
-    description: 'Charming 4-bedroom home in a quiet, family-friendly neighborhood. Large backyard, newly renovated kitchen, and a two-car garage.',
+    description: 'Charming 4-bedroom home in a quiet, family-friendly neighbourhood. Large backyard, newly renovated kitchen, and a two-car garage.',
     contact: {
       name: 'John Agent',
       email: 'john.agent@example.com',
@@ -40,7 +40,7 @@ export const mockProperties: Property[] = [
   },
   {
     id: 'prop-3',
-    name: 'Cozy Beachside Cottage',
+    name: 'Cosy Beachside Cottage',
     address: '789 Ocean Blvd, Beachtown, USA 67890',
     description: 'A quaint cottage just steps from the sand. Enjoy ocean breezes from the porch and fall asleep to the sound of waves. Ideal for a vacation home or rental property.',
     contact: {

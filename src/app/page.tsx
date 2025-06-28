@@ -51,7 +51,7 @@ export default function LandingPage() {
                   <CardTitle className="mt-4">Easy 360° Uploads</CardTitle>
                 </CardHeader>
                 <CardContent>
-                  <p className="text-muted-foreground">Quickly upload images from your Ricoh 360 cameras and other sources. Our platform optimizes them for a smooth viewing experience.</p>
+                  <p className="text-muted-foreground">Quickly upload images from your Ricoh 360 cameras and other sources. Our platform optimises them for a smooth viewing experience.</p>
                 </CardContent>
               </Card>
               <Card className="text-center shadow-lg hover:shadow-xl transition-shadow duration-300">
@@ -82,7 +82,7 @@ export default function LandingPage() {
 
         <section className="py-20 md:py-24">
           <div className="container mx-auto px-4 sm:px-6 lg:px-8 text-center">
-            <h2 className="text-3xl md:text-4xl font-bold text-primary">Ready to Weave Your First Tour?</h2>
+            <h2 className="text-3xl md:text-4xl font-bold text-primary">Ready to Create Your First Tour?</h2>
             <p className="max-w-2xl mx-auto text-muted-foreground mt-4 mb-8">
               Sign up today and start creating virtual tours that leave a lasting impression.
             </p>
