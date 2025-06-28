@@ -2,7 +2,7 @@ import Link from 'next/link';
 import Image from 'next/image';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { UploadCloud, Sparkles, Building, PanelTop } from 'lucide-react';
+import { UploadCloud, Sparkles, Building, PanelTop, Check } from 'lucide-react';
 import Logo from '@/components/Logo';
 
 export default function LandingPage() {
@@ -90,8 +90,47 @@ export default function LandingPage() {
             </div>
           </div>
         </section>
-
+        
         <section className="py-20 md:py-24">
+          <div className="container mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="grid grid-cols-1 items-center gap-12 md:grid-cols-2">
+              <div className="order-2 md:order-1">
+                <h2 className="text-3xl md:text-4xl font-bold mb-4">Create a Floor Plan in 10 Minutes</h2>
+                <p className="text-muted-foreground mb-6">
+                  Floor plans are a necessity when listing a property, yet they are often incredibly tedious and time consuming for estate agents. Our system is designed to streamline your floor plan creation process and remove the stress with our all-in-one solution.
+                </p>
+                <p className="text-muted-foreground mb-6">
+                  By capturing one image per room we can create you a 98% accurate floor plan, eliminating the need for complex software and manual measuring.
+                </p>
+                <p className="font-semibold text-lg mb-6">You take the photo, we do the rest.</p>
+                <div className="space-y-4">
+                    <h3 className="font-bold text-xl">Reduce Admin Time</h3>
+                    <p className="text-muted-foreground">Your floor plans are guaranteed to be delivered to you by the end of the next working day, with the option to be watermarked with your company logo.</p>
+                    <ul className="grid grid-cols-1 gap-x-8 gap-y-4 text-muted-foreground sm:grid-cols-2">
+                        <li className="flex items-center gap-3"><Check className="h-5 w-5 text-primary" /> Next day working delivery</li>
+                        <li className="flex items-center gap-3"><Check className="h-5 w-5 text-primary" /> One-shot-per-room</li>
+                        <li className="flex items-center gap-3"><Check className="h-5 w-5 text-primary" /> No manual measuring</li>
+                        <li className="flex items-center gap-3"><Check className="h-5 w-5 text-primary" /> No floor plan software</li>
+                        <li className="flex items-center gap-3"><Check className="h-5 w-5 text-primary" /> Customisable room labels</li>
+                        <li className="flex items-center gap-3"><Check className="h-5 w-5 text-primary" /> Complete with dimensions</li>
+                    </ul>
+                </div>
+              </div>
+              <div className="order-1 md:order-2">
+                <Image
+                  src="https://placehold.co/600x500.png"
+                  alt="Example of a generated floor plan"
+                  width={600}
+                  height={500}
+                  className="rounded-lg shadow-xl"
+                  data-ai-hint="floor plan diagram"
+                />
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section className="bg-white py-20 md:py-24">
           <div className="container mx-auto px-4 sm:px-6 lg:px-8 text-center">
             <h2 className="text-3xl md:text-4xl font-bold text-primary">Ready to Create Your First Tour?</h2>
             <p className="max-w-2xl mx-auto text-muted-foreground mt-4 mb-8">
@@ -104,7 +143,7 @@ export default function LandingPage() {
         </section>
       </main>
 
-      <footer className="bg-white border-t">
+      <footer className="bg-card border-t">
         <div className="container mx-auto py-6 px-4 sm:px-6 lg:px-8 text-center text-muted-foreground">
           <p>&copy; {new Date().getFullYear()} 360 Walkthrough. All rights reserved.</p>
         </div>
