@@ -5,63 +5,50 @@ const Logo = () => {
     <Link href="/" className="flex items-center gap-2">
       <svg
         className="h-10 w-auto"
-        viewBox="0 0 154 95"
+        viewBox="0 0 174 121"
         fill="none"
         xmlns="http://www.w3.org/2000/svg"
       >
         <style>{`
-          .text-360 {
+          .logo-360-text {
             font-family: sans-serif;
-            font-size: 28px;
+            font-size: 52px;
             font-weight: bold;
             fill: black;
             text-anchor: middle;
           }
-          .text-walkthrough {
+          .logo-walkthrough-text {
             font-family: sans-serif;
-            font-size: 18px;
+            font-size: 24px;
             fill: black;
             text-anchor: middle;
           }
         `}</style>
-        {/* House Outline */}
         <path
-          d="M2 45L77 10L152 45V90H2V45Z"
+          d="M7 114V60L87 7L167 60V114"
           stroke="black"
-          strokeWidth="4"
+          strokeWidth="10"
+          strokeLinecap="round"
+          strokeLinejoin="round"
         />
-        {/* 360° Text */}
-        <text
-          x="77"
-          y="48"
-          className="text-360"
-        >
-          360°
+        <text x="87" y="80" className="logo-360-text">
+          360
+          <tspan fontSize="32" dy="-20">°</tspan>
         </text>
-        
-        {/* Arrow */}
         <path
-          d="M45 68 A 45 12 0 1 1 125 68"
+          d="M40 92C40 82, 134 82, 134 92"
           stroke="#C49C68"
-          strokeWidth="5"
-          fill="none"
+          strokeWidth="10"
           strokeLinecap="round"
         />
         <path
-            d="M115 64 L125 68 L120 78"
-            stroke="#C49C68"
-            fill="none"
-            strokeWidth="5"
-            strokeLinecap="round"
-            strokeLinejoin="round"
+          d="M124 88L134 92L128 102"
+          stroke="#C49C68"
+          strokeWidth="10"
+          strokeLinecap="round"
+          strokeLinejoin="round"
         />
-
-        {/* Walkthrough Text */}
-        <text
-          x="77"
-          y="85"
-          className="text-walkthrough"
-        >
+        <text x="87" y="110" className="logo-walkthrough-text">
           walkthrough
         </text>
       </svg>
