@@ -1,7 +1,7 @@
 'use client';
 
 import { mockProperties } from '@/lib/data';
-import { notFound } from 'next/navigation';
+import { notFound, useParams } from 'next/navigation';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription, CardFooter } from '@/components/ui/card';
 import { Building, User, Phone, Mail, PlusCircle, Download, FileText, Camera, Orbit, ExternalLink } from 'lucide-react';
@@ -19,7 +19,8 @@ import {
 } from "@/components/ui/dialog";
 import RequestChangesForm from '@/components/dashboard/request-changes-form';
 
-export default function PropertyDetailPage({ params }: { params: { id: string } }) {
+export default function PropertyDetailPage() {
+  const params = useParams<{ id: string }>();
   const property = mockProperties.find((p) => p.id === params.id);
 
   if (!property) {
