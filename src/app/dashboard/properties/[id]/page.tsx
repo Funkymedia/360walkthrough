@@ -98,7 +98,7 @@ export default function PropertyDetailPage() {
           <RequestChangesForm />
         </TabsContent>
         <TabsContent value="images" className="mt-6 space-y-6">
-          <PropertyImageUploader initialImages={property.images} allImages={property.images} />
+          <PropertyImageUploader property={property} />
           {property.tourUrl && (
             <Card>
               <CardHeader>

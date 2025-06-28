@@ -2,7 +2,7 @@
 
 import { createContext, useState, useContext, ReactNode } from 'react';
 import { mockProperties } from '@/lib/data';
-import type { Property, FloorPlan } from '@/lib/types';
+import type { Property, FloorPlan, PropertyImage } from '@/lib/types';
 import type { PropertyFormValues } from '@/components/dashboard/property-form';
 
 export type FloorPlanFormValues = { name: string; file: File };
@@ -12,6 +12,9 @@ interface PropertiesContextType {
     addProperty: (propertyData: PropertyFormValues) => void;
     addFloorPlan: (propertyId: string, floorPlanData: FloorPlanFormValues) => void;
     deleteFloorPlan: (propertyId: string, floorPlanId: string) => void;
+    addImage: (propertyId: string, imageFile: File) => Promise<PropertyImage>;
+    updateImage: (propertyId: string, updatedImage: PropertyImage) => void;
+    deleteImage: (propertyId: string, imageId: string) => void;
 }
 
 const PropertiesContext = createContext<PropertiesContextType | undefined>(undefined);
@@ -70,8 +73,60 @@ export function PropertiesProvider({ children }: { children: ReactNode }) {
         );
     };
 
+    const addImage = (propertyId: string, imageFile: File): Promise<PropertyImage> => {
+        return new Promise((resolve) => {
+          const newImage: PropertyImage = {
+            id: `img-${Date.now()}`,
+            url: URL.createObjectURL(imageFile),
+            tags: [],
+            paths: [],
+          };
+    
+          setProperties((prev) =>
+            prev.map((p) => {
+              if (p.id === propertyId) {
+                return {
+                  ...p,
+                  images: [...p.images, newImage],
+                };
+              }
+              return p;
+            })
+          );
+          resolve(newImage);
+        });
+      };
+    
+      const updateImage = (propertyId: string, updatedImage: PropertyImage) => {
+        setProperties((prev) =>
+          prev.map((p) => {
+            if (p.id === propertyId) {
+              return {
+                ...p,
+                images: p.images.map((img) => (img.id === updatedImage.id ? updatedImage : img)),
+              };
+            }
+            return p;
+          })
+        );
+      };
+    
+      const deleteImage = (propertyId: string, imageId: string) => {
+        setProperties((prev) =>
+          prev.map((p) => {
+            if (p.id === propertyId) {
+              return {
+                ...p,
+                images: p.images.filter((img) => img.id !== imageId),
+              };
+            }
+            return p;
+          })
+        );
+      };
+
     return (
-        <PropertiesContext.Provider value={{ properties, addProperty, addFloorPlan, deleteFloorPlan }}>
+        <PropertiesContext.Provider value={{ properties, addProperty, addFloorPlan, deleteFloorPlan, addImage, updateImage, deleteImage }}>
             {children}
         </PropertiesContext.Provider>
     );

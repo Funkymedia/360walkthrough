@@ -10,23 +10,27 @@ import { Label } from '@/components/ui/label';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { UploadCloud, Loader2, X, Pin, Waypoints, ArrowRight, Trash2 } from 'lucide-react';
 import Image from 'next/image';
-import { PropertyImage, ImagePath } from '@/lib/types';
+import { Property, PropertyImage, ImagePath } from '@/lib/types';
 import { useToast } from '@/hooks/use-toast';
+import { useProperties } from '@/contexts/properties-context';
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "@/components/ui/alert-dialog";
 
 interface PropertyImageUploaderProps {
-  initialImages: PropertyImage[];
-  allImages: PropertyImage[];
+  property: Property;
 }
 
-interface UploadedImage extends PropertyImage {
-  file?: File;
-  dataUrl: string;
-}
-
-export default function PropertyImageUploader({ initialImages, allImages }: PropertyImageUploaderProps) {
-  const [images, setImages] = useState<UploadedImage[]>(
-    initialImages.map((img) => ({ ...img, dataUrl: img.url }))
-  );
+export default function PropertyImageUploader({ property }: PropertyImageUploaderProps) {
+  const { addImage, updateImage, deleteImage } = useProperties();
   const [isGenerating, setIsGenerating] = useState<Record<string, boolean>>({});
   const fileInputRef = useRef<HTMLInputElement>(null);
   const { toast } = useToast();
@@ -37,17 +41,9 @@ export default function PropertyImageUploader({ initialImages, allImages }: Prop
 
     for (const file of Array.from(files)) {
       const reader = new FileReader();
-      reader.onload = (e) => {
+      reader.onload = async (e) => {
         const dataUrl = e.target?.result as string;
-        const newImage: UploadedImage = {
-          id: `new-${Date.now()}-${Math.random()}`,
-          url: '',
-          tags: [],
-          paths: [],
-          file,
-          dataUrl,
-        };
-        setImages((prev) => [...prev, newImage]);
+        const newImage = await addImage(property.id, file);
         handleGenerateTags(newImage.id, dataUrl);
       };
       reader.readAsDataURL(file);
@@ -58,9 +54,14 @@ export default function PropertyImageUploader({ initialImages, allImages }: Prop
     setIsGenerating((prev) => ({ ...prev, [imageId]: true }));
     try {
       const result = await generateImageTags({ photoDataUri });
-      setImages((prev) =>
-        prev.map((img) => (img.id === imageId ? { ...img, tags: result.tags } : img))
-      );
+      // The property object from context might be stale here, so we find from the latest properties state
+      const { properties } = useProperties();
+      const currentProperty = properties.find(p => p.id === property.id);
+      const imageToUpdate = currentProperty?.images.find(img => img.id === imageId);
+      
+      if (imageToUpdate) {
+        updateImage(property.id, { ...imageToUpdate, tags: result.tags });
+      }
     } catch (error) {
       console.error('Error generating tags:', error);
       toast({
@@ -73,41 +74,29 @@ export default function PropertyImageUploader({ initialImages, allImages }: Prop
     }
   };
 
-  const removeImage = (id: string) => {
-    setImages((prev) => prev.filter((img) => img.id !== id));
-  };
-  
-  const removeTag = (imageId: string, tagToRemove: string) => {
-    setImages(prevImages => prevImages.map(image => {
-      if (image.id === imageId) {
-        return { ...image, tags: image.tags.filter(tag => tag !== tagToRemove) };
-      }
-      return image;
-    }));
+  const handleDeleteImage = (id: string) => {
+    deleteImage(property.id, id);
+    toast({
+      title: "Image Deleted",
+      description: "The image has been successfully removed.",
+    });
   };
 
-  const addTag = (imageId: string, newTag: string) => {
-    if (newTag.trim() === '') return;
-    setImages(prevImages => prevImages.map(image => {
-        if (image.id === imageId && !image.tags.includes(newTag.trim())) {
-            return { ...image, tags: [...image.tags, newTag.trim()] };
-        }
-        return image;
-    }));
+  const removeTag = (image: PropertyImage, tagToRemove: string) => {
+    const updatedTags = image.tags.filter((tag) => tag !== tagToRemove);
+    updateImage(property.id, { ...image, tags: updatedTags });
   };
 
-  const handleRemovePath = (imageId: string, pathId: string) => {
-    setImages(prev => prev.map(img => {
-      if (img.id === imageId) {
-        return {
-          ...img,
-          paths: img.paths?.filter(p => p.id !== pathId)
-        };
-      }
-      return img;
-    }));
+  const addTag = (image: PropertyImage, newTag: string) => {
+    if (newTag.trim() === '' || image.tags.includes(newTag.trim())) return;
+    const updatedTags = [...image.tags, newTag.trim()];
+    updateImage(property.id, { ...image, tags: updatedTags });
   };
 
+  const handleRemovePath = (image: PropertyImage, pathId: string) => {
+    const updatedPaths = image.paths?.filter((p) => p.id !== pathId);
+    updateImage(property.id, { ...image, paths: updatedPaths });
+  };
 
   return (
     <Card>
@@ -119,18 +108,35 @@ export default function PropertyImageUploader({ initialImages, allImages }: Prop
       </CardHeader>
       <CardContent>
         <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-2">
-          {images.map((image) => (
+          {property.images.map((image) => (
             <Card key={image.id} className="overflow-hidden flex flex-col">
               <div className="relative h-48 w-full">
-                <Image src={image.dataUrl} alt="360 preview" fill className="object-cover" />
-                <Button
-                  size="icon"
-                  variant="destructive"
-                  className="absolute right-2 top-2 h-7 w-7"
-                  onClick={() => removeImage(image.id)}
-                >
-                  <X className="h-4 w-4" />
-                </Button>
+                <Image src={image.url} alt="360 preview" fill className="object-cover" />
+                <AlertDialog>
+                  <AlertDialogTrigger asChild>
+                    <Button
+                      size="icon"
+                      variant="destructive"
+                      className="absolute right-2 top-2 h-7 w-7"
+                    >
+                      <Trash2 className="h-4 w-4" />
+                    </Button>
+                  </AlertDialogTrigger>
+                  <AlertDialogContent>
+                    <AlertDialogHeader>
+                      <AlertDialogTitle>Are you sure?</AlertDialogTitle>
+                      <AlertDialogDescription>
+                        This action cannot be undone. This will permanently delete this image.
+                      </AlertDialogDescription>
+                    </AlertDialogHeader>
+                    <AlertDialogFooter>
+                      <AlertDialogCancel>Cancel</AlertDialogCancel>
+                      <AlertDialogAction onClick={() => handleDeleteImage(image.id)}>
+                        Continue
+                      </AlertDialogAction>
+                    </AlertDialogFooter>
+                  </AlertDialogContent>
+                </AlertDialog>
               </div>
               <div className="p-4 flex-grow flex flex-col gap-4">
                 <div>
@@ -145,12 +151,12 @@ export default function PropertyImageUploader({ initialImages, allImages }: Prop
                     {image.tags.map((tag) => (
                       <Badge key={tag} variant="secondary" className="pr-1">
                         {tag}
-                        <button onClick={() => removeTag(image.id, tag)} className="ml-1 rounded-full p-0.5 hover:bg-destructive/20">
+                        <button onClick={() => removeTag(image, tag)} className="ml-1 rounded-full p-0.5 hover:bg-destructive/20">
                           <X className="h-3 w-3"/>
                         </button>
                       </Badge>
                     ))}
-                    <form onSubmit={(e) => { e.preventDefault(); const input = e.currentTarget.elements.namedItem('newTag') as HTMLInputElement; addTag(image.id, input.value); input.value = ''; }}>
+                    <form onSubmit={(e) => { e.preventDefault(); const input = e.currentTarget.elements.namedItem('newTag') as HTMLInputElement; addTag(image, input.value); input.value = ''; }}>
                           <div className="flex items-center">
                               <Input name="newTag" placeholder="Add tag" className="h-7 text-xs flex-grow" />
                           </div>
@@ -178,7 +184,7 @@ export default function PropertyImageUploader({ initialImages, allImages }: Prop
                                     <ArrowRight className="h-3 w-3" />
                                     <span>{path.name}</span>
                                     </div>
-                                    <Button variant="ghost" size="icon" className="h-6 w-6" onClick={() => handleRemovePath(image.id, path.id)}>
+                                    <Button variant="ghost" size="icon" className="h-6 w-6" onClick={() => handleRemovePath(image, path.id)}>
                                         <Trash2 className="h-3 w-3 text-destructive" />
                                     </Button>
                                 </div>
@@ -194,7 +200,7 @@ export default function PropertyImageUploader({ initialImages, allImages }: Prop
                                     <SelectValue placeholder="Link to..." />
                                 </SelectTrigger>
                                 <SelectContent>
-                                    {allImages.filter(i => i.id !== image.id).map(targetImage => (
+                                    {property.images.filter(i => i.id !== image.id).map(targetImage => (
                                         <SelectItem key={targetImage.id} value={targetImage.id}>
                                             Image {targetImage.id.substring(4, 10)}
                                         </SelectItem>
