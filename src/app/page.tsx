@@ -25,10 +25,10 @@ export default function LandingPage() {
           <div className="absolute inset-0 z-0">
             <Image
               src="https://placehold.co/1920x1080.png"
-              alt="360 tour of a modern property"
+              alt="A cozy bedroom in a modern property"
               fill
               className="object-cover"
-              data-ai-hint="property interior"
+              data-ai-hint="cozy bedroom"
             />
             <div className="absolute inset-0 bg-black/60" />
           </div>
