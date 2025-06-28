@@ -18,9 +18,26 @@ export const mockProperties: Property[] = [
       email: 'jane.realtor@example.com',
       phone: '555-123-4567',
     },
+    tourUrl: 'https://kuula.co/share/collection/7q1vF?logo=1&info=1&fs=1&vr=0&sd=1&thumbs=1',
     images: [
-      { id: 'img-1-1', url: 'https://placehold.co/800x400.png', tags: ['living room', 'modern', 'city view'] },
-      { id: 'img-1-2', url: 'https://placehold.co/800x400.png', tags: ['kitchen', 'granite worktops', 'stainless steel'] },
+      { 
+        id: 'img-1-1', 
+        url: 'https://placehold.co/800x400.png', 
+        tags: ['living room', 'modern', 'city view'],
+        startingView: { pitch: 10, yaw: -90 },
+        paths: [
+          { id: 'path-1', name: 'Go to Kitchen', targetImageId: 'img-1-2' }
+        ]
+      },
+      { 
+        id: 'img-1-2', 
+        url: 'https://placehold.co/800x400.png', 
+        tags: ['kitchen', 'granite worktops', 'stainless steel'],
+        startingView: { pitch: 0, yaw: 0 },
+        paths: [
+          { id: 'path-2', name: 'Go to Living Room', targetImageId: 'img-1-1' }
+        ]
+      },
     ],
     floorPlans: [
       { id: 'fp-1-1', name: 'Ground Floor', url: 'https://placehold.co/800x600.png' },

@@ -1,7 +1,18 @@
+export interface ImagePath {
+  id: string;
+  name: string;
+  targetImageId: string;
+}
+
 export interface PropertyImage {
   id: string;
   url: string;
   tags: string[];
+  paths?: ImagePath[];
+  startingView?: {
+    pitch: number;
+    yaw: number;
+  };
 }
 
 export interface FloorPlan {
@@ -22,6 +33,7 @@ export interface Property {
   };
   images: PropertyImage[];
   floorPlans?: FloorPlan[];
+  tourUrl?: string;
 }
 
 export interface User {

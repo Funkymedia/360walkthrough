@@ -4,7 +4,7 @@ import { mockProperties } from '@/lib/data';
 import { notFound } from 'next/navigation';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription, CardFooter } from '@/components/ui/card';
-import { Building, User, Phone, Mail, PlusCircle, Download, FileText, Camera } from 'lucide-react';
+import { Building, User, Phone, Mail, PlusCircle, Download, FileText, Camera, Orbit, ExternalLink } from 'lucide-react';
 import PropertyImageUploader from '@/components/dashboard/property-image-uploader';
 import FloorPlanUploader from '@/components/dashboard/floor-plan-uploader';
 import Image from 'next/image';
@@ -36,13 +36,17 @@ export default function PropertyDetailPage({ params }: { params: { id: string } 
       </div>
 
       <Tabs defaultValue="details">
-        <TabsList className="grid w-full grid-cols-3">
+        <TabsList className="grid w-full grid-cols-4">
           <TabsTrigger value="details">Details</TabsTrigger>
           <TabsTrigger value="images" className="font-semibold data-[state=active]:bg-primary data-[state=active]:text-primary-foreground">
             <Camera className="mr-2 h-4 w-4" />
             360° Images
           </TabsTrigger>
           <TabsTrigger value="floorplan">Floor Plans</TabsTrigger>
+          <TabsTrigger value="tour">
+            <Orbit className="mr-2 h-4 w-4" />
+            360° Tour
+          </TabsTrigger>
         </TabsList>
         <TabsContent value="details" className="mt-6 space-y-6">
           <Card>
@@ -66,8 +70,32 @@ export default function PropertyDetailPage({ params }: { params: { id: string } 
           </Card>
           <RequestChangesForm />
         </TabsContent>
-        <TabsContent value="images" className="mt-6">
-          <PropertyImageUploader initialImages={property.images} />
+        <TabsContent value="images" className="mt-6 space-y-6">
+          {property.tourUrl && (
+            <Card>
+              <CardHeader>
+                <CardTitle>Interactive 360° Tour</CardTitle>
+                <CardDescription>The full virtual tour is also available here for easy access.</CardDescription>
+              </CardHeader>
+              <CardContent>
+                <div className="aspect-video w-full overflow-hidden rounded-lg border">
+                  <iframe
+                    src={property.tourUrl}
+                    className="h-full w-full"
+                    allow="fullscreen; xr-spatial-tracking"
+                  ></iframe>
+                </div>
+              </CardContent>
+              <CardFooter>
+                  <Button asChild className="ml-auto">
+                      <a href={property.tourUrl} target="_blank" rel="noopener noreferrer">
+                          <ExternalLink className="mr-2 h-4 w-4" /> View Fullscreen
+                      </a>
+                  </Button>
+              </CardFooter>
+            </Card>
+          )}
+          <PropertyImageUploader initialImages={property.images} allImages={property.images} />
         </TabsContent>
         <TabsContent value="floorplan" className="mt-6">
           <Card>
@@ -131,6 +159,41 @@ export default function PropertyDetailPage({ params }: { params: { id: string } 
                 )}
             </CardContent>
           </Card>
+        </TabsContent>
+        <TabsContent value="tour" className="mt-6">
+            <Card>
+            <CardHeader>
+                <CardTitle>Interactive 360° Tour</CardTitle>
+                <CardDescription>Explore the full virtual tour of the property.</CardDescription>
+            </CardHeader>
+            <CardContent>
+                {property.tourUrl ? (
+                <div className="aspect-video w-full overflow-hidden rounded-lg border">
+                    <iframe
+                    src={property.tourUrl}
+                    className="h-full w-full"
+                    allow="fullscreen; xr-spatial-tracking"
+                    ></iframe>
+                </div>
+                ) : (
+                <div className="flex flex-col items-center justify-center rounded-lg border-2 border-dashed border-muted-foreground/30 bg-card p-12 text-center">
+                    <h3 className="text-xl font-semibold">Tour Not Available</h3>
+                    <p className="mt-2 text-muted-foreground">
+                    The 360° tour for this property has not been generated yet.
+                    </p>
+                </div>
+                )}
+            </CardContent>
+            {property.tourUrl && (
+                <CardFooter>
+                    <Button asChild className="ml-auto">
+                        <a href={property.tourUrl} target="_blank" rel="noopener noreferrer">
+                            <ExternalLink className="mr-2 h-4 w-4" /> View Fullscreen
+                        </a>
+                    </Button>
+                </CardFooter>
+            )}
+            </Card>
         </TabsContent>
       </Tabs>
     </div>

@@ -6,13 +6,16 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Badge } from '@/components/ui/badge';
-import { UploadCloud, Loader2, X, Plus } from 'lucide-react';
+import { Label } from '@/components/ui/label';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import { UploadCloud, Loader2, X, Pin, Waypoints, ArrowRight, Trash2 } from 'lucide-react';
 import Image from 'next/image';
-import { PropertyImage } from '@/lib/types';
+import { PropertyImage, ImagePath } from '@/lib/types';
 import { useToast } from '@/hooks/use-toast';
 
 interface PropertyImageUploaderProps {
   initialImages: PropertyImage[];
+  allImages: PropertyImage[];
 }
 
 interface UploadedImage extends PropertyImage {
@@ -20,7 +23,7 @@ interface UploadedImage extends PropertyImage {
   dataUrl: string;
 }
 
-export default function PropertyImageUploader({ initialImages }: PropertyImageUploaderProps) {
+export default function PropertyImageUploader({ initialImages, allImages }: PropertyImageUploaderProps) {
   const [images, setImages] = useState<UploadedImage[]>(
     initialImages.map((img) => ({ ...img, dataUrl: img.url }))
   );
@@ -40,6 +43,7 @@ export default function PropertyImageUploader({ initialImages }: PropertyImageUp
           id: `new-${Date.now()}-${Math.random()}`,
           url: '',
           tags: [],
+          paths: [],
           file,
           dataUrl,
         };
@@ -92,18 +96,31 @@ export default function PropertyImageUploader({ initialImages }: PropertyImageUp
     }));
   };
 
+  const handleRemovePath = (imageId: string, pathId: string) => {
+    setImages(prev => prev.map(img => {
+      if (img.id === imageId) {
+        return {
+          ...img,
+          paths: img.paths?.filter(p => p.id !== pathId)
+        };
+      }
+      return img;
+    }));
+  };
+
+
   return (
     <Card>
       <CardHeader>
         <CardTitle>360° Images</CardTitle>
         <CardDescription>
-          Upload 360° images for this property. Our AI will automatically suggest tags.
+          Manage the 360° images for this property. Configure starting views and link images together with hotspots.
         </CardDescription>
       </CardHeader>
       <CardContent>
-        <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
+        <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-2">
           {images.map((image) => (
-            <Card key={image.id} className="overflow-hidden">
+            <Card key={image.id} className="overflow-hidden flex flex-col">
               <div className="relative h-48 w-full">
                 <Image src={image.dataUrl} alt="360 preview" fill className="object-cover" />
                 <Button
@@ -115,35 +132,85 @@ export default function PropertyImageUploader({ initialImages }: PropertyImageUp
                   <X className="h-4 w-4" />
                 </Button>
               </div>
-              <div className="p-4">
-                <h4 className="font-semibold mb-2">Tags</h4>
-                {isGenerating[image.id] && (
-                  <div className="flex items-center text-sm text-muted-foreground">
-                    <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                    Generating tags...
+              <div className="p-4 flex-grow flex flex-col gap-4">
+                <div>
+                  <h4 className="font-semibold mb-2">Tags</h4>
+                  {isGenerating[image.id] && (
+                    <div className="flex items-center text-sm text-muted-foreground">
+                      <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                      Generating tags...
+                    </div>
+                  )}
+                  <div className="flex flex-wrap gap-2">
+                    {image.tags.map((tag) => (
+                      <Badge key={tag} variant="secondary" className="pr-1">
+                        {tag}
+                        <button onClick={() => removeTag(image.id, tag)} className="ml-1 rounded-full p-0.5 hover:bg-destructive/20">
+                          <X className="h-3 w-3"/>
+                        </button>
+                      </Badge>
+                    ))}
+                    <form onSubmit={(e) => { e.preventDefault(); const input = e.currentTarget.elements.namedItem('newTag') as HTMLInputElement; addTag(image.id, input.value); input.value = ''; }}>
+                          <div className="flex items-center">
+                              <Input name="newTag" placeholder="Add tag" className="h-7 text-xs flex-grow" />
+                          </div>
+                      </form>
                   </div>
-                )}
-                <div className="flex flex-wrap gap-2">
-                  {image.tags.map((tag) => (
-                    <Badge key={tag} variant="secondary" className="pr-1">
-                      {tag}
-                      <button onClick={() => removeTag(image.id, tag)} className="ml-1 rounded-full p-0.5 hover:bg-destructive/20">
-                        <X className="h-3 w-3"/>
-                      </button>
-                    </Badge>
-                  ))}
-                   <form onSubmit={(e) => { e.preventDefault(); const input = e.currentTarget.elements.namedItem('newTag') as HTMLInputElement; addTag(image.id, input.value); input.value = ''; }}>
-                        <div className="flex items-center">
-                            <Input name="newTag" placeholder="Add tag" className="h-7 text-xs flex-grow" />
+                </div>
+
+                <div className="space-y-4 pt-4 border-t mt-auto">
+                    <h4 className="font-semibold">Configuration</h4>
+                    
+                    <div className="space-y-2">
+                        <Label className="flex items-center gap-2 text-sm"><Pin className="h-4 w-4 text-muted-foreground"/> Starting View</Label>
+                        <div className="flex gap-2">
+                            <Input type="number" placeholder="Pitch" defaultValue={image.startingView?.pitch} className="text-xs h-8" />
+                            <Input type="number" placeholder="Yaw" defaultValue={image.startingView?.yaw} className="text-xs h-8" />
                         </div>
-                    </form>
+                    </div>
+
+                    <div className="space-y-2">
+                        <Label className="flex items-center gap-2 text-sm"><Waypoints className="h-4 w-4 text-muted-foreground"/> Hotspots (Paths)</Label>
+                        <div className="space-y-1">
+                            {image.paths?.map(path => (
+                                <div key={path.id} className="flex items-center justify-between text-xs bg-muted/50 p-1.5 rounded-md">
+                                    <div className="flex items-center gap-2">
+                                    <ArrowRight className="h-3 w-3" />
+                                    <span>{path.name}</span>
+                                    </div>
+                                    <Button variant="ghost" size="icon" className="h-6 w-6" onClick={() => handleRemovePath(image.id, path.id)}>
+                                        <Trash2 className="h-3 w-3 text-destructive" />
+                                    </Button>
+                                </div>
+                            ))}
+                             {(!image.paths || image.paths.length === 0) && (
+                                <p className="text-xs text-muted-foreground p-1.5">No hotspots added.</p>
+                             )}
+                        </div>
+                        <form className="flex gap-2 pt-2 items-center">
+                            <Input placeholder="Hotspot Name" className="h-8 text-xs flex-grow" />
+                            <Select>
+                                <SelectTrigger className="h-8 text-xs w-[120px] shrink-0">
+                                    <SelectValue placeholder="Link to..." />
+                                </SelectTrigger>
+                                <SelectContent>
+                                    {allImages.filter(i => i.id !== image.id).map(targetImage => (
+                                        <SelectItem key={targetImage.id} value={targetImage.id}>
+                                            Image {targetImage.id.substring(4, 10)}
+                                        </SelectItem>
+                                    ))}
+                                </SelectContent>
+                            </Select>
+                            <Button size="sm" type="submit" variant="outline" className="h-8">Add</Button>
+                        </form>
+                    </div>
                 </div>
               </div>
             </Card>
           ))}
           <div
             onClick={() => fileInputRef.current?.click()}
-            className="flex cursor-pointer flex-col items-center justify-center rounded-lg border-2 border-dashed p-12 text-center transition-colors hover:border-primary hover:bg-primary/5"
+            className="flex cursor-pointer flex-col items-center justify-center rounded-lg border-2 border-dashed p-12 text-center transition-colors hover:border-primary hover:bg-primary/5 min-h-[400px]"
           >
             <UploadCloud className="mx-auto h-12 w-12 text-muted-foreground" />
             <h3 className="mt-4 text-lg font-semibold">Upload Images</h3>
