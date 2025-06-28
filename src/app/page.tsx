@@ -1,4 +1,5 @@
 import Link from 'next/link';
+import Image from 'next/image';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { UploadCloud, Sparkles, Building, PanelTop } from 'lucide-react';
@@ -20,12 +21,22 @@ export default function LandingPage() {
       </header>
 
       <main className="flex-grow">
-        <section className="py-20 md:py-32">
-          <div className="container mx-auto px-4 sm:px-6 lg:px-8 text-center">
-            <h1 className="text-4xl md:text-6xl font-extrabold tracking-tighter text-primary mb-6">
+        <section className="relative py-20 md:py-32">
+          <div className="absolute inset-0 z-0">
+            <Image
+              src="https://placehold.co/1920x1080.png"
+              alt="360 tour of a modern property"
+              fill
+              className="object-cover"
+              data-ai-hint="property interior"
+            />
+            <div className="absolute inset-0 bg-black/60" />
+          </div>
+          <div className="relative z-10 container mx-auto px-4 sm:px-6 lg:px-8 text-center">
+            <h1 className="text-4xl md:text-6xl font-extrabold tracking-tighter text-white mb-6">
               Create Stunning 360° Virtual Tours
             </h1>
-            <p className="max-w-3xl mx-auto text-lg md:text-xl text-muted-foreground mb-10">
+            <p className="max-w-3xl mx-auto text-lg md:text-xl text-neutral-200 mb-10">
               360 Walkthrough helps you build and share immersive property experiences. Upload your 360° photos and floor plans, and let our AI do the heavy lifting.
             </p>
             <Button size="lg" asChild>
