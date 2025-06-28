@@ -26,7 +26,7 @@ export default function LandingPage() {
               Create Stunning 360° Virtual Tours
             </h1>
             <p className="max-w-3xl mx-auto text-lg md:text-xl text-muted-foreground mb-10">
-              Tour Weaver 360 helps you build and share immersive property experiences. Upload your 360° photos and floor plans, and let our AI do the heavy lifting.
+              360 Walkthrough helps you build and share immersive property experiences. Upload your 360° photos and floor plans, and let our AI do the heavy lifting.
             </p>
             <Button size="lg" asChild>
               <Link href="/signup">Get Started for Free</Link>
@@ -95,7 +95,7 @@ export default function LandingPage() {
 
       <footer className="bg-white border-t">
         <div className="container mx-auto py-6 px-4 sm:px-6 lg:px-8 text-center text-muted-foreground">
-          <p>&copy; {new Date().getFullYear()} Tour Weaver 360. All rights reserved.</p>
+          <p>&copy; {new Date().getFullYear()} 360 Walkthrough. All rights reserved.</p>
         </div>
       </footer>
     </div>

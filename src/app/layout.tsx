@@ -3,7 +3,7 @@ import './globals.css';
 import { Toaster } from '@/components/ui/toaster';
 
 export const metadata: Metadata = {
-  title: 'Tour Weaver 360',
+  title: '360 Walkthrough',
   description: 'Create Stunning 360° Virtual Tours Effortlessly',
 };
 
