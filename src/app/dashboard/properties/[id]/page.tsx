@@ -32,19 +32,35 @@ import RequestChangesForm from '@/components/dashboard/request-changes-form';
 import { useState, useEffect } from 'react';
 import { useToast } from '@/hooks/use-toast';
 import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
 
 export default function PropertyDetailPage() {
   const params = useParams<{ id: string }>();
   const { properties, deleteFloorPlan, updateProperty } = useProperties();
   const { toast } = useToast();
   const property = properties.find((p) => p.id === params.id);
+  
   const [isUploadDialogOpen, setIsUploadDialogOpen] = useState(false);
+  
   const [isEditingName, setIsEditingName] = useState(false);
   const [name, setName] = useState(property?.name || '');
+
+  const [isEditingAddress, setIsEditingAddress] = useState(false);
+  const [address, setAddress] = useState(property?.address || '');
+
+  const [isEditingContact, setIsEditingContact] = useState(false);
+  const [contactName, setContactName] = useState(property?.contact.name || '');
+  const [contactEmail, setContactEmail] = useState(property?.contact.email || '');
+  const [contactPhone, setContactPhone] = useState(property?.contact.phone || '');
+
 
   useEffect(() => {
     if (property) {
       setName(property.name);
+      setAddress(property.address);
+      setContactName(property.contact.name);
+      setContactEmail(property.contact.email);
+      setContactPhone(property.contact.phone);
     }
   }, [property]);
 
@@ -86,6 +102,54 @@ export default function PropertyDetailPage() {
     }
   };
 
+  const handleAddressSave = () => {
+    if (property && address.trim()) {
+      updateProperty(property.id, {
+        name: property.name,
+        address: address,
+        description: property.description,
+        contactName: property.contact.name,
+        contactEmail: property.contact.email,
+        contactPhone: property.contact.phone
+      });
+      setIsEditingAddress(false);
+      toast({
+        title: "Success",
+        description: "Property address has been updated."
+      });
+    } else {
+      toast({
+        variant: "destructive",
+        title: "Error",
+        description: "Property address cannot be empty."
+      });
+    }
+  };
+
+  const handleContactSave = () => {
+    if (property && contactName.trim() && contactEmail.trim() && contactPhone.trim()) {
+      updateProperty(property.id, {
+        name: property.name,
+        address: property.address,
+        description: property.description,
+        contactName: contactName,
+        contactEmail: contactEmail,
+        contactPhone: contactPhone
+      });
+      setIsEditingContact(false);
+      toast({
+        title: "Success",
+        description: "Contact information has been updated."
+      });
+    } else {
+      toast({
+        variant: "destructive",
+        title: "Error",
+        description: "All contact fields are required."
+      });
+    }
+  };
+
   return (
     <div className="space-y-6">
       <div className="space-y-1">
@@ -114,9 +178,30 @@ export default function PropertyDetailPage() {
             </>
           )}
         </div>
-        <p className="flex items-center gap-2 text-muted-foreground">
-          <Building className="h-4 w-4" /> {property.address}
-        </p>
+        {isEditingAddress ? (
+          <div className="flex w-full items-center gap-2">
+            <Building className="h-4 w-4 text-muted-foreground" />
+            <Input 
+              value={address} 
+              onChange={(e) => setAddress(e.target.value)}
+              onKeyDown={(e) => { if (e.key === 'Enter') handleAddressSave() }}
+              className="h-auto py-1"
+            />
+            <Button size="icon" className="h-8 w-8" onClick={handleAddressSave}>
+                <Check className="h-4 w-4" />
+            </Button>
+            <Button size="icon" className="h-8 w-8" variant="ghost" onClick={() => { setIsEditingAddress(false); setAddress(property.address); }}>
+                <X className="h-4 w-4" />
+            </Button>
+          </div>
+        ) : (
+          <p className="flex items-center gap-2 text-muted-foreground">
+            <Building className="h-4 w-4" /> {property.address}
+            <Button variant="ghost" size="icon" className="h-6 w-6" onClick={() => setIsEditingAddress(true)}>
+              <Pencil className="h-3 w-3" />
+            </Button>
+          </p>
+        )}
       </div>
 
       <Tabs defaultValue="details">
@@ -143,12 +228,55 @@ export default function PropertyDetailPage() {
                 <p className="mt-1 text-muted-foreground">{property.description}</p>
               </div>
               <div className="rounded-lg border p-4">
-                <h3 className="font-semibold mb-2">Contact Information</h3>
-                <div className="space-y-2 text-muted-foreground">
-                    <p className="flex items-center gap-2"><User className="h-4 w-4" /> {property.contact.name}</p>
-                    <p className="flex items-center gap-2"><Mail className="h-4 w-4" /> {property.contact.email}</p>
-                    <p className="flex items-center gap-2"><Phone className="h-4 w-4" /> {property.contact.phone}</p>
+                <div className="flex items-center justify-between mb-2">
+                  <h3 className="font-semibold">Contact Information</h3>
+                  {!isEditingContact && (
+                      <Button variant="ghost" size="sm" onClick={() => setIsEditingContact(true)}>
+                          <Pencil className="mr-2 h-3 w-3" />
+                          Edit
+                      </Button>
+                  )}
                 </div>
+                {isEditingContact ? (
+                  <div className="space-y-4">
+                      <div className="space-y-1">
+                          <Label htmlFor="contact-name" className="text-xs text-muted-foreground">Name</Label>
+                          <div className="flex items-center gap-2">
+                              <User className="h-4 w-4 text-muted-foreground" />
+                              <Input id="contact-name" value={contactName} onChange={(e) => setContactName(e.target.value)} className="h-8" />
+                          </div>
+                      </div>
+                      <div className="space-y-1">
+                          <Label htmlFor="contact-email" className="text-xs text-muted-foreground">Email</Label>
+                          <div className="flex items-center gap-2">
+                              <Mail className="h-4 w-4 text-muted-foreground" />
+                              <Input id="contact-email" type="email" value={contactEmail} onChange={(e) => setContactEmail(e.target.value)} className="h-8" />
+                          </div>
+                      </div>
+                      <div className="space-y-1">
+                          <Label htmlFor="contact-phone" className="text-xs text-muted-foreground">Phone</Label>
+                          <div className="flex items-center gap-2">
+                              <Phone className="h-4 w-4 text-muted-foreground" />
+                              <Input id="contact-phone" type="tel" value={contactPhone} onChange={(e) => setContactPhone(e.target.value)} className="h-8" />
+                          </div>
+                      </div>
+                      <div className="flex justify-end gap-2 pt-2">
+                          <Button size="sm" variant="ghost" onClick={() => {
+                              setIsEditingContact(false);
+                              setContactName(property.contact.name);
+                              setContactEmail(property.contact.email);
+                              setContactPhone(property.contact.phone);
+                          }}>Cancel</Button>
+                          <Button size="sm" onClick={handleContactSave}>Save</Button>
+                      </div>
+                  </div>
+                ) : (
+                  <div className="space-y-2 text-muted-foreground">
+                      <p className="flex items-center gap-2"><User className="h-4 w-4" /> {property.contact.name}</p>
+                      <p className="flex items-center gap-2"><Mail className="h-4 w-4" /> {property.contact.email}</p>
+                      <p className="flex items-center gap-2"><Phone className="h-4 w-4" /> {property.contact.phone}</p>
+                  </div>
+                )}
               </div>
             </CardContent>
           </Card>
