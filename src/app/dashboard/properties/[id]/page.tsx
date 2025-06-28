@@ -1,11 +1,22 @@
+'use client';
+
 import { mockProperties } from '@/lib/data';
 import { notFound } from 'next/navigation';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
-import { Building, User, Phone, Mail, Image as ImageIcon, PanelTop } from 'lucide-react';
+import { Card, CardContent, CardHeader, CardTitle, CardDescription, CardFooter } from '@/components/ui/card';
+import { Building, User, Phone, Mail, Upload } from 'lucide-react';
 import PropertyImageUploader from '@/components/dashboard/property-image-uploader';
 import FloorPlanUploader from '@/components/dashboard/floor-plan-uploader';
 import Image from 'next/image';
+import { Button } from '@/components/ui/button';
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
 
 export default function PropertyDetailPage({ params }: { params: { id: string } }) {
   const property = mockProperties.find((p) => p.id === params.id);
@@ -68,6 +79,27 @@ export default function PropertyDetailPage({ params }: { params: { id: string } 
                     <FloorPlanUploader />
                 )}
             </CardContent>
+            {property.floorPlanUrl && (
+              <CardFooter>
+                <Dialog>
+                  <DialogTrigger asChild>
+                    <Button variant="outline" className="ml-auto">
+                      <Upload className="mr-2 h-4 w-4" />
+                      Change Floor Plan
+                    </Button>
+                  </DialogTrigger>
+                  <DialogContent>
+                    <DialogHeader>
+                      <DialogTitle>Upload New Floor Plan</DialogTitle>
+                      <DialogDescription>
+                        Select a new image or PDF file to replace the existing floor plan.
+                      </DialogDescription>
+                    </DialogHeader>
+                    <FloorPlanUploader />
+                  </DialogContent>
+                </Dialog>
+              </CardFooter>
+            )}
             </Card>
         </TabsContent>
       </Tabs>
