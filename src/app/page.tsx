@@ -2,7 +2,7 @@ import Link from 'next/link';
 import Image from 'next/image';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { UploadCloud, Sparkles, Building, PanelTop, Check } from 'lucide-react';
+import { UploadCloud, Sparkles, Building, PanelTop, Check, Orbit } from 'lucide-react';
 import Logo from '@/components/Logo';
 
 export default function LandingPage() {
@@ -131,6 +131,44 @@ export default function LandingPage() {
         </section>
 
         <section className="bg-white py-20 md:py-24">
+          <div className="container mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="grid grid-cols-1 items-center gap-12 md:grid-cols-2">
+              <div>
+                <Image
+                  src="https://placehold.co/600x500.png"
+                  alt="Example of a 360 virtual tour"
+                  width={600}
+                  height={500}
+                  className="rounded-lg shadow-xl"
+                  data-ai-hint="virtual tour property"
+                />
+              </div>
+              <div>
+                <h2 className="text-3xl md:text-4xl font-bold mb-4">Virtual Tours Enhance Physical Viewings</h2>
+                <p className="text-muted-foreground mb-6">
+                  Upgrade your listings beyond traditional static images. Allow buyers to virtually explore a property from the comfort of their own homes, creating a
+                  dynamic and engaging experience that brings your listings to life.
+                </p>
+                <p className="text-muted-foreground mb-6">
+                  It is a common misconception that a virtual tour will minimise the number of viewings you get on a property, but this isn’t entirely true. Virtual tours
+                  actually maximise the number of viewings you can get online by reaching out-of-area buyers. Furthermore, a virtual tour will pre-screen your buyers,
+                  leading to more serious enquiries and higher quality buyer leads.
+                </p>
+                <p className="text-muted-foreground mb-8">
+                  Our one-shot-per-room technology creates a fully branded 4K virtual tour and 98% accurate floor plan in under 10 minutes for a 3-bedroom house.
+                </p>
+                <Button asChild>
+                  <Link href="#">
+                    <Orbit className="mr-2 h-4 w-4" />
+                    Example 360 Virtual Tour
+                  </Link>
+                </Button>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section className="py-20 md:py-24">
           <div className="container mx-auto px-4 sm:px-6 lg:px-8 text-center">
             <h2 className="text-3xl md:text-4xl font-bold text-primary">Ready to Create Your First Tour?</h2>
             <p className="max-w-2xl mx-auto text-muted-foreground mt-4 mb-8">
