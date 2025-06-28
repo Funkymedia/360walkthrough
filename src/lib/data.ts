@@ -23,7 +23,7 @@ export const mockProperties: Property[] = [
     images: [
       { 
         id: 'img-1-1', 
-        url: 'https://placehold.co/800x400.png', 
+        url: 'https://placehold.co/600x400.png', 
         tags: ['living room', 'modern', 'city view'],
         startingView: { pitch: 10, yaw: -90 },
         paths: [
@@ -32,7 +32,7 @@ export const mockProperties: Property[] = [
       },
       { 
         id: 'img-1-2', 
-        url: 'https://placehold.co/800x400.png', 
+        url: 'https://placehold.co/600x400.png', 
         tags: ['kitchen', 'granite worktops', 'stainless steel'],
         startingView: { pitch: 0, yaw: 0 },
         paths: [
@@ -56,7 +56,7 @@ export const mockProperties: Property[] = [
       phone: '07700 900123',
     },
     images: [
-      { id: 'img-2-1', url: 'https://placehold.co/800x400.png', tags: ['exterior', 'suburban', 'brick'] },
+      { id: 'img-2-1', url: 'https://placehold.co/600x400.png', tags: ['exterior', 'suburban', 'brick'] },
     ],
     floorPlans: [],
   },

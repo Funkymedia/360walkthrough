@@ -10,18 +10,20 @@ interface PropertyCardProps {
 }
 
 export default function PropertyCard({ property }: PropertyCardProps) {
-  const firstImage = property.images.length > 0 ? property.images[0].url : 'https://placehold.co/600x400.png';
+  const hasImages = property.images.length > 0;
+  const imageUrl = hasImages ? property.images[0].url : 'https://placehold.co/600x400.png';
+  const imageHint = hasImages ? 'property exterior' : 'modern property';
 
   return (
     <Card className="flex flex-col overflow-hidden shadow-lg transition-transform duration-300 hover:scale-105 hover:shadow-xl">
       <CardHeader className="p-0">
         <div className="relative h-48 w-full">
           <Image
-            src={firstImage}
+            src={imageUrl}
             alt={`Image of ${property.name}`}
             fill
             className="object-cover"
-            data-ai-hint="property exterior"
+            data-ai-hint={imageHint}
           />
         </div>
         <div className="p-6">
