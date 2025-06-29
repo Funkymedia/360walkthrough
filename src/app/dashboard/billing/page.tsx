@@ -6,6 +6,8 @@ import { Badge } from '@/components/ui/badge';
 const proFeatures = [
   'Unlimited active tours',
   'AI Image Enhancement',
+  'AI Image Retouching & Object Removal',
+  'EPC Search & Download',
   'Custom branding',
   'RICOH360 Watermark Display Setting',
   'Real time visitor analytics',
