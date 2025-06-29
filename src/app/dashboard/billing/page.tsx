@@ -7,6 +7,7 @@ const proFeatures = [
   'Unlimited active tours',
   'AI Image Enhancement',
   'AI Image Retouching & Object Removal',
+  'AI Video Maker',
   'EPC Search & Download',
   'Custom branding',
   'RICOH360 Watermark Display Setting',
