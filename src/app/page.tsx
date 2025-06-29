@@ -191,7 +191,7 @@ export default function LandingPage() {
               </div>
               <div className="order-1 md:order-2">
                 <Image
-                  src="https://placehold.co/600x500.png"
+                  src="/ricoh-camera.png"
                   alt="RICOH 360 camera"
                   width={600}
                   height={500}
