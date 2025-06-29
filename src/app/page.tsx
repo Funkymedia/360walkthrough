@@ -118,7 +118,7 @@ export default function LandingPage() {
               </div>
               <div className="order-1 md:order-2">
                 <Image
-                  src="https://placehold.co/600x500.png"
+                  src="/floor-plan.png"
                   alt="Example of a generated floor plan"
                   width={600}
                   height={500}
