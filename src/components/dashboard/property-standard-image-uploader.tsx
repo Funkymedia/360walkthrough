@@ -7,7 +7,7 @@ import { Button } from '@/components/ui/button';
 import { Textarea } from '@/components/ui/textarea';
 import { Badge } from '@/components/ui/badge';
 import { Label } from '@/components/ui/label';
-import { UploadCloud, Loader2, Trash2, Wand2 } from 'lucide-react';
+import { UploadCloud, Loader2, Trash2, Wand2, Download } from 'lucide-react';
 import Image from 'next/image';
 import { Property, StandardPropertyImage } from '@/lib/types';
 import { useToast } from '@/hooks/use-toast';
@@ -189,6 +189,14 @@ export default function PropertyStandardImageUploader({ property }: { property: 
                                             </div>
                                         )}
                                     </div>
+                                    {image.editedUrl && (
+                                        <Button asChild variant="outline" className="w-full">
+                                            <a href={image.editedUrl} download={`retouched-${image.id}.png`}>
+                                                <Download className="mr-2 h-4 w-4" />
+                                                Download Retouched Image
+                                            </a>
+                                        </Button>
+                                    )}
                                 </div>
                             </CardContent>
                         </Card>
