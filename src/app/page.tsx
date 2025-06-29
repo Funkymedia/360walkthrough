@@ -2,7 +2,7 @@ import Link from 'next/link';
 import Image from 'next/image';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { UploadCloud, Sparkles, Building, PanelTop, Check, Orbit, Camera } from 'lucide-react';
+import { UploadCloud, Sparkles, Building, PanelTop, Check, Orbit, Camera, FileCheck } from 'lucide-react';
 import Logo from '@/components/Logo';
 
 export default function LandingPage() {
@@ -167,7 +167,7 @@ export default function LandingPage() {
             </div>
           </div>
         </section>
-
+        
         <section className="py-20 md:py-24">
           <div className="container mx-auto px-4 sm:px-6 lg:px-8">
             <div className="grid grid-cols-1 items-center gap-12 md:grid-cols-2">
@@ -202,8 +202,37 @@ export default function LandingPage() {
             </div>
           </div>
         </section>
-
+        
         <section className="bg-white py-20 md:py-24">
+          <div className="container mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="grid grid-cols-1 items-center gap-12 md:grid-cols-2">
+              <div>
+                <Image
+                  src="https://placehold.co/600x500.png"
+                  alt="Example of an EPC certificate"
+                  width={600}
+                  height={500}
+                  className="rounded-lg shadow-xl"
+                  data-ai-hint="EPC certificate"
+                />
+              </div>
+              <div>
+                <h2 className="text-3xl md:text-4xl font-bold mb-4">Check and order EPCs, without leaving your screen</h2>
+                <p className="text-muted-foreground mb-6">
+                  Sorting your EPCs shouldn’t be an effort. Safeguard your time and let our team oversee the entire process.
+                </p>
+                <Button asChild>
+                  <Link href="/dashboard/epcs">
+                    <FileCheck className="mr-2 h-4 w-4" />
+                    Download the certificate
+                  </Link>
+                </Button>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section className="py-20 md:py-24">
           <div className="container mx-auto px-4 sm:px-6 lg:px-8 text-center">
             <h2 className="text-3xl md:text-4xl font-bold text-primary">Ready to Create Your First Tour?</h2>
             <p className="max-w-2xl mx-auto text-muted-foreground mt-4 mb-8">
