@@ -4,7 +4,7 @@ import { useProperties } from '@/contexts/properties-context';
 import { notFound, useParams } from 'next/navigation';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription, CardFooter } from '@/components/ui/card';
-import { Building, User, Phone, Mail, PlusCircle, Download, FileText, Camera, Orbit, ExternalLink, Trash2, Pencil, Check, X, Facebook, Linkedin, Instagram, Wand2 } from 'lucide-react';
+import { Building, User, Phone, Mail, PlusCircle, Download, FileText, Camera, Orbit, ExternalLink, Trash2, Pencil, Check, X, Facebook, Linkedin, Instagram, Wand2, Loader2 } from 'lucide-react';
 import PropertyImageUploader from '@/components/dashboard/property-image-uploader';
 import PropertyStandardImageUploader from '@/components/dashboard/property-standard-image-uploader';
 import FloorPlanUploader from '@/components/dashboard/floor-plan-uploader';
@@ -35,10 +35,11 @@ import { useToast } from '@/hooks/use-toast';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
+import { generateTour } from './actions';
 
 export default function PropertyDetailPage() {
   const params = useParams<{ id: string }>();
-  const { properties, deleteFloorPlan, updateProperty } = useProperties();
+  const { properties, deleteFloorPlan, updateProperty, updateTourUrl } = useProperties();
   const { toast } = useToast();
   const property = properties.find((p) => p.id === params.id);
   
@@ -54,6 +55,8 @@ export default function PropertyDetailPage() {
   const [contactName, setContactName] = useState(property?.contact.name || '');
   const [contactEmail, setContactEmail] = useState(property?.contact.email || '');
   const [contactPhone, setContactPhone] = useState(property?.contact.phone || '');
+
+  const [isGeneratingTour, setIsGeneratingTour] = useState(false);
 
 
   useEffect(() => {
@@ -151,6 +154,29 @@ export default function PropertyDetailPage() {
       });
     }
   };
+
+  const handleGenerateTour = async () => {
+    if (!property) return;
+
+    setIsGeneratingTour(true);
+    try {
+        const result = await generateTour(property.id);
+        updateTourUrl(property.id, result.tourUrl);
+        toast({
+            title: "Success!",
+            description: "Your 360° virtual tour has been generated.",
+        });
+    } catch (error) {
+        console.error("Failed to generate tour:", error);
+        toast({
+            variant: "destructive",
+            title: "Error",
+            description: "Could not generate the virtual tour. Please try again.",
+        });
+    } finally {
+        setIsGeneratingTour(false);
+    }
+};
 
   return (
     <div className="space-y-6">
@@ -455,24 +481,46 @@ export default function PropertyDetailPage() {
             <Card>
             <CardHeader>
                 <CardTitle>Interactive 360° Tour</CardTitle>
-                <CardDescription>Explore the full virtual tour of the property.</CardDescription>
+                <CardDescription>
+                    {property.tourUrl 
+                        ? "Explore the full virtual tour of the property." 
+                        : "Generate a virtual tour from your uploaded 360° images."}
+                </CardDescription>
             </CardHeader>
             <CardContent>
                 {property.tourUrl ? (
-                <div className="aspect-video w-full overflow-hidden rounded-lg border">
-                    <iframe
-                    src={property.tourUrl}
-                    className="h-full w-full"
-                    allow="fullscreen; xr-spatial-tracking"
-                    ></iframe>
-                </div>
+                    <div className="aspect-video w-full overflow-hidden rounded-lg border">
+                        <iframe
+                        src={property.tourUrl}
+                        className="h-full w-full"
+                        allow="fullscreen; xr-spatial-tracking"
+                        ></iframe>
+                    </div>
                 ) : (
-                <div className="flex flex-col items-center justify-center rounded-lg border-2 border-dashed border-muted-foreground/30 bg-card p-12 text-center">
-                    <h3 className="text-xl font-semibold">Tour Not Available</h3>
-                    <p className="mt-2 text-muted-foreground">
-                    The 360° tour for this property has not been generated yet.
-                    </p>
-                </div>
+                    <div className="flex flex-col items-center justify-center rounded-lg border-2 border-dashed border-muted-foreground/30 bg-card p-12 text-center min-h-[400px]">
+                        {isGeneratingTour ? (
+                            <>
+                                <Loader2 className="h-12 w-12 animate-spin text-primary" />
+                                <h3 className="text-xl font-semibold mt-4">Generating Tour...</h3>
+                                <p className="mt-2 text-muted-foreground">
+                                    This may take a few moments. Please don't navigate away.
+                                </p>
+                            </>
+                        ) : (
+                            <>
+                                <Orbit className="h-12 w-12 text-muted-foreground" />
+                                <h3 className="text-xl font-semibold mt-4">Tour Not Generated</h3>
+                                <p className="mt-2 text-muted-foreground">
+                                    Once you have uploaded and configured your 360° images, you can generate the tour.
+                                </p>
+                                <Button className="mt-6" onClick={handleGenerateTour} disabled={isGeneratingTour || property.images.length === 0}>
+                                    <Orbit className="mr-2 h-4 w-4" />
+                                    Generate Tour with RICOH 360
+                                </Button>
+                                {property.images.length === 0 && <p className="text-xs text-destructive mt-2">Please upload at least one 360° image to generate a tour.</p>}
+                            </>
+                        )}
+                    </div>
                 )}
             </CardContent>
             {property.tourUrl && (

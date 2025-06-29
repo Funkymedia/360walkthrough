@@ -11,6 +11,7 @@ interface PropertiesContextType {
     properties: Property[];
     addProperty: (propertyData: PropertyFormValues) => void;
     updateProperty: (propertyId: string, propertyData: PropertyFormValues) => void;
+    updateTourUrl: (propertyId: string, tourUrl: string) => void;
     addFloorPlan: (propertyId: string, floorPlanData: FloorPlanFormValues) => void;
     deleteFloorPlan: (propertyId: string, floorPlanId: string) => void;
     addImage: (propertyId: string, imageFile: File) => Promise<PropertyImage>;
@@ -64,6 +65,17 @@ export function PropertiesProvider({ children }: { children: ReactNode }) {
                         },
                         brandingLogoUrl: newLogoUrl
                     };
+                }
+                return p;
+            })
+        );
+    };
+    
+    const updateTourUrl = (propertyId: string, tourUrl: string) => {
+        setProperties(prev =>
+            prev.map(p => {
+                if (p.id === propertyId) {
+                    return { ...p, tourUrl: tourUrl };
                 }
                 return p;
             })
@@ -208,7 +220,7 @@ export function PropertiesProvider({ children }: { children: ReactNode }) {
 
 
     return (
-        <PropertiesContext.Provider value={{ properties, addProperty, updateProperty, addFloorPlan, deleteFloorPlan, addImage, updateImage, deleteImage, addStandardImage, updateStandardImage, deleteStandardImage }}>
+        <PropertiesContext.Provider value={{ properties, addProperty, updateProperty, updateTourUrl, addFloorPlan, deleteFloorPlan, addImage, updateImage, deleteImage, addStandardImage, updateStandardImage, deleteStandardImage }}>
             {children}
         </PropertiesContext.Provider>
     );
