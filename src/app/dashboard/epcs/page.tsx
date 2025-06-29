@@ -5,7 +5,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
-import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from '@/components/ui/dialog';
+import { Dialog, DialogContent } from '@/components/ui/dialog';
 import { searchEpcs, getCertificate, DomesticSearchResult, DomesticCertificate } from './actions';
 import { Loader2, Search, FileText, Download } from 'lucide-react';
 
@@ -29,76 +29,83 @@ const EnergyRatingBadge = ({ rating }: { rating: string }) => {
   );
 };
 
-const EnergyRatingChart = ({ value, isPotential = false }: { value: number, isPotential?: boolean }) => {
-    const getBarData = (val: number) => {
-        if (val >= 92) return { rating: 'A', range: '92+', color: 'bg-green-700', left: '7%' };
-        if (val >= 81) return { rating: 'B', range: '81-91', color: 'bg-green-600', left: '22%' };
-        if (val >= 69) return { rating: 'C', range: '69-80', color: 'bg-yellow-500', left: '37%' };
-        if (val >= 55) return { rating: 'D', range: '55-68', color: 'bg-yellow-400', left: '52%' };
-        if (val >= 39) return { rating: 'E', range: '39-54', color: 'bg-orange-500', left: '67%' };
-        if (val >= 21) return { rating: 'F', range: '21-38', color: 'bg-orange-600', left: '82%' };
-        return { rating: 'G', range: '1-20', color: 'bg-red-700', left: '94%' };
-    };
-
-    const data = getBarData(value);
-
-    return (
-        <div className="font-sans w-full">
-            <div className="flex text-xs text-white text-center font-bold">
-                <div className="w-[15%] bg-green-700 rounded-l-sm py-1">A</div>
-                <div className="w-[15%] bg-green-600 py-1">B</div>
-                <div className="w-[15%] bg-yellow-500 py-1 text-black">C</div>
-                <div className="w-[15%] bg-yellow-400 py-1 text-black">D</div>
-                <div className="w-[15%] bg-orange-500 py-1">E</div>
-                <div className="w-[15%] bg-orange-600 py-1">F</div>
-                <div className="w-[10%] bg-red-700 rounded-r-sm py-1">G</div>
-            </div>
-            <div className="relative h-4 mt-1">
-                <div 
-                    className={`absolute -top-1 w-10 h-6 ${isPotential ? 'bg-blue-600' : 'bg-black'} text-white rounded flex items-center justify-center text-xs font-bold border-2 border-white shadow-lg`} 
-                    style={{ left: `calc(${data.left} - 20px)` }}
-                >
-                    {value}
-                </div>
-            </div>
-        </div>
-    );
-};
-
-
-const CertificateDetails = ({ certificate }: { certificate: DomesticCertificate }) => {
+const EpcCertificateDisplay = ({ certificate }: { certificate: DomesticCertificate }) => {
     const downloadUrl = `https://find-energy-certificate.service.gov.uk/energy-certificate/${certificate['lmk-key']}`;
 
+    const calculateLeftPercentage = (value: number) => {
+        if (value < 1) return 0.5;
+        if (value > 100) return 99.5;
+        return value;
+    }
+
     return (
-        <div className="w-full space-y-4">
-            <div>
-                <h4 className="font-semibold text-sm mb-2">Energy efficiency rating</h4>
-                <div className='space-y-2'>
-                    <EnergyRatingChart value={certificate['current-energy-efficiency']} />
-                    <EnergyRatingChart value={certificate['potential-energy-efficiency']} isPotential />
-                </div>
-                 <div className="flex items-center gap-4 mt-2 text-xs">
-                    <div className="flex items-center gap-2"><div className="w-3 h-3 rounded-sm bg-black" /> Current</div>
-                    <div className="flex items-center gap-2"><div className="w-3 h-3 rounded-sm bg-blue-600" /> Potential</div>
+        <div className="w-full space-y-4 rounded-lg p-6 bg-white text-black shadow-lg font-sans">
+            <div className="text-center pb-4 border-b">
+                <h3 className="text-2xl font-bold">Energy Performance Certificate</h3>
+                <p className="text-sm text-gray-600">England & Wales</p>
+            </div>
+            
+            <div className="border-b pb-2 text-sm">
+                <p className="font-bold">{certificate.address}, {certificate.postcode}</p>
+                <div className="flex justify-between mt-1 text-gray-700">
+                    <span>Certificate number: <span className="font-mono">{certificate['lmk-key']}</span></span>
+                    <span>Valid until: {new Date(certificate['expiry-date']).toLocaleDateString()}</span>
                 </div>
             </div>
-            <div className="rounded-lg border bg-muted/50 p-4">
+            
+            <div className="pt-2">
+                <h4 className="font-semibold text-lg mb-2">Energy efficiency rating</h4>
+                <div className="relative mb-16 mt-4">
+                    <div className="flex text-sm text-white text-center font-bold rounded-sm overflow-hidden shadow-md">
+                        <div className="w-[21%] bg-[#00833e] py-2 text-left pl-2 flex flex-col justify-center"><span>(92+)</span><span>A</span></div>
+                        <div className="w-[12%] bg-[#25974a] py-2 flex flex-col justify-center"><span>(81-91)</span><span>B</span></div>
+                        <div className="w-[14%] bg-[#97cb4a] py-2 text-black flex flex-col justify-center"><span>(69-80)</span><span>C</span></div>
+                        <div className="w-[14%] bg-[#fef200] py-2 text-black flex flex-col justify-center"><span>(55-68)</span><span>D</span></div>
+                        <div className="w-[16%] bg-[#f5a822] py-2 text-black flex flex-col justify-center"><span>(39-54)</span><span>E</span></div>
+                        <div className="w-[18%] bg-[#f06d24] py-2 flex flex-col justify-center"><span>(21-38)</span><span>F</span></div>
+                        <div className="w-[5%] bg-[#e92128] py-2 flex flex-col justify-center"><span>(1-20)</span><span>G</span></div>
+                    </div>
+                    
+                    <div className="absolute top-full mt-2 w-full">
+                         <div 
+                            className="absolute font-bold text-sm text-black flex flex-col items-center"
+                            style={{ left: `${calculateLeftPercentage(certificate['current-energy-efficiency'])}%`, transform: 'translateX(-50%)' }}
+                        >
+                            <div className="flex items-center bg-black text-white px-2 py-1 rounded">
+                                {certificate['current-energy-efficiency']}
+                            </div>
+                            <div className="w-0 h-0 border-l-4 border-l-transparent border-r-4 border-r-transparent border-b-8 border-b-black"></div>
+                            <span className="text-xs mt-1">Current</span>
+                        </div>
+
+                         <div 
+                            className="absolute top-10 font-bold text-sm text-blue-600 flex flex-col items-center"
+                             style={{ left: `${calculateLeftPercentage(certificate['potential-energy-efficiency'])}%`, transform: 'translateX(-50%)' }}
+                        >
+                            <div className="flex items-center bg-blue-600 text-white px-2 py-1 rounded">
+                                {certificate['potential-energy-efficiency']}
+                            </div>
+                             <div className="w-0 h-0 border-l-4 border-l-transparent border-r-4 border-r-transparent border-b-8 border-b-blue-600"></div>
+                             <span className="text-xs mt-1">Potential</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div className="rounded-lg border bg-gray-50 p-4 text-sm">
                 <h4 className="font-semibold mb-2">Property Details</h4>
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-x-4 gap-y-2 text-sm">
-                    <p><strong>Address:</strong> {certificate.address}, {certificate.postcode}</p>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-x-4 gap-y-1">
                     <p><strong>Property Type:</strong> {certificate['property-type']}</p>
                     <p><strong>Built Form:</strong> {certificate['built-form']}</p>
                     <p><strong>Total Floor Area:</strong> {certificate['total-floor-area']} m²</p>
                     <p><strong>Local Authority:</strong> {certificate['local-authority-label']}</p>
-                    <p><strong>Valid Until:</strong> {new Date(certificate['expiry-date']).toLocaleDateString()}</p>
-                    <p className="col-span-full"><strong>Certificate Key:</strong> <span className="font-mono text-xs">{certificate['lmk-key']}</span></p>
                 </div>
             </div>
-            <div className="flex justify-end pt-2">
-                <Button asChild>
+             <div className="flex justify-end pt-2">
+                <Button asChild className="bg-primary hover:bg-primary/90 text-primary-foreground">
                     <a href={downloadUrl} target="_blank" rel="noopener noreferrer">
                         <Download className="mr-2 h-4 w-4" />
-                        Download Certificate
+                        Download Official Certificate
                     </a>
                 </Button>
             </div>
@@ -227,17 +234,13 @@ export default function EpcPage() {
     </Card>
     
     <Dialog open={!!selectedCertificate || isFetchingDetails} onOpenChange={(open) => {if (!open) setSelectedCertificate(null)}}>
-        <DialogContent className="max-w-2xl">
-            <DialogHeader>
-                <DialogTitle>EPC Details</DialogTitle>
-                <DialogDescription>
-                    Full details for the selected Energy Performance Certificate.
-                </DialogDescription>
-            </DialogHeader>
-            <div className="min-h-[200px] flex items-center justify-center">
-                {isFetchingDetails && <Loader2 className="h-8 w-8 animate-spin"/>}
-                {selectedCertificate && <CertificateDetails certificate={selectedCertificate} />}
-            </div>
+        <DialogContent className="max-w-2xl bg-transparent border-none shadow-none p-0">
+            {isFetchingDetails && 
+                <div className="min-h-[400px] flex items-center justify-center">
+                    <Loader2 className="h-8 w-8 animate-spin text-white"/>
+                </div>
+            }
+            {selectedCertificate && <EpcCertificateDisplay certificate={selectedCertificate} />}
         </DialogContent>
     </Dialog>
     </>
