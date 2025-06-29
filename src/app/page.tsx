@@ -233,6 +233,30 @@ export default function LandingPage() {
         </section>
 
         <section className="py-20 md:py-24">
+          <div className="container mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="grid grid-cols-1 items-center gap-12 md:grid-cols-2">
+              <div className="order-2 md:order-1">
+                <h2 className="text-3xl md:text-4xl font-bold mb-4">Empowering estate agents and our team</h2>
+                <p className="text-muted-foreground mb-6">
+                  We help ambitious estate agents win more instructions, generate more leads, and grow their businesses with 360 Walkthroughs. And we know that great work starts with a great team. That’s why we invest in our people – fostering a culture of collaboration, growth, and innovation. When our team thrives, so do our customers.
+                </p>
+                <p className="font-semibold text-lg text-right">- Cristina Axford, Founder of Funky Media LTD</p>
+              </div>
+              <div className="order-1 md:order-2">
+                <Image
+                  src="https://placehold.co/600x500.png"
+                  alt="Portrait of the founder, Cristina Axford"
+                  width={600}
+                  height={500}
+                  className="rounded-lg shadow-xl"
+                  data-ai-hint="professional portrait"
+                />
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section className="py-20 md:py-24">
           <div className="container mx-auto px-4 sm:px-6 lg:px-8 text-center">
             <h2 className="text-3xl md:text-4xl font-bold text-primary">Ready to Create Your First Tour?</h2>
             <p className="max-w-2xl mx-auto text-muted-foreground mt-4 mb-8">
