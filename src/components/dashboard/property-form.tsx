@@ -22,6 +22,7 @@ const propertySchema = z.object({
   contactEmail: z.string().email('Please enter a valid email.'),
   contactPhone: z.string().min(10, 'Please enter a valid phone number.'),
   brandingLogo: z.any().optional(),
+  heroImage: z.any().optional(),
 });
 
 export type PropertyFormValues = z.infer<typeof propertySchema>;
@@ -35,6 +36,7 @@ export default function PropertyForm({ initialData }: PropertyFormProps) {
   const { addProperty, updateProperty } = useProperties();
   const [isLoading, setIsLoading] = useState(false);
   const [logoPreview, setLogoPreview] = useState<string | null>(initialData?.brandingLogoUrl || null);
+  const [heroImagePreview, setHeroImagePreview] = useState<string | null>(initialData?.heroImageUrl || null);
 
   const form = useForm<PropertyFormValues>({
     resolver: zodResolver(propertySchema),
@@ -46,6 +48,7 @@ export default function PropertyForm({ initialData }: PropertyFormProps) {
       contactEmail: initialData?.contact.email || '',
       contactPhone: initialData?.contact.phone || '',
       brandingLogo: undefined,
+      heroImage: undefined,
     },
   });
 
@@ -120,6 +123,46 @@ export default function PropertyForm({ initialData }: PropertyFormProps) {
             />
         </div>
         
+        <div className="space-y-4 rounded-lg border p-4">
+            <h3 className="text-lg font-medium">Main Image</h3>
+             <p className="text-sm text-muted-foreground">
+                Upload a hero image for the property tile.
+            </p>
+            <FormField
+                control={form.control}
+                name="heroImage"
+                render={({ field }) => (
+                <FormItem>
+                    <FormLabel>Hero Image</FormLabel>
+                    <FormControl>
+                    <Input
+                        type="file"
+                        accept="image/png, image/jpeg, image/webp"
+                        onChange={(event) => {
+                            const files = event.target.files;
+                            field.onChange(files);
+                            if (files && files.length > 0) {
+                                setHeroImagePreview(URL.createObjectURL(files[0]));
+                            } else {
+                                setHeroImagePreview(initialData?.heroImageUrl || null);
+                            }
+                        }}
+                    />
+                    </FormControl>
+                    <FormMessage />
+                </FormItem>
+                )}
+            />
+            {heroImagePreview && (
+                <div className="mt-4">
+                <p className="text-sm font-medium text-muted-foreground">Hero Image Preview:</p>
+                <div className="relative mt-2 h-32 w-48 rounded-md border p-2">
+                    <Image src={heroImagePreview} alt="Hero image preview" fill className="object-cover rounded-md" />
+                </div>
+                </div>
+            )}
+        </div>
+
         <div className="space-y-4 rounded-lg border p-4">
             <h3 className="text-lg font-medium">Contact Information</h3>
             <div className="grid grid-cols-1 gap-4 md:grid-cols-2">

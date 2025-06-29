@@ -42,6 +42,7 @@ export function PropertiesProvider({ children }: { children: ReactNode }) {
             standardImages: [],
             floorPlans: [],
             brandingLogoUrl: data.brandingLogo?.[0] ? URL.createObjectURL(data.brandingLogo[0]) : undefined,
+            heroImageUrl: data.heroImage?.[0] ? URL.createObjectURL(data.heroImage[0]) : undefined,
         };
         setProperties(prev => [newProperty, ...prev]);
     };
@@ -52,6 +53,8 @@ export function PropertiesProvider({ children }: { children: ReactNode }) {
                 if (p.id === propertyId) {
                     const newLogoFile = data.brandingLogo?.[0];
                     const newLogoUrl = newLogoFile ? URL.createObjectURL(newLogoFile) : p.brandingLogoUrl;
+                    const newHeroImageFile = data.heroImage?.[0];
+                    const newHeroImageUrl = newHeroImageFile ? URL.createObjectURL(newHeroImageFile) : p.heroImageUrl;
 
                     return {
                         ...p,
@@ -63,7 +66,8 @@ export function PropertiesProvider({ children }: { children: ReactNode }) {
                             email: data.contactEmail,
                             phone: data.contactPhone,
                         },
-                        brandingLogoUrl: newLogoUrl
+                        brandingLogoUrl: newLogoUrl,
+                        heroImageUrl: newHeroImageUrl,
                     };
                 }
                 return p;

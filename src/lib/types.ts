@@ -44,6 +44,7 @@ export interface Property {
   floorPlans?: FloorPlan[];
   tourUrl?: string;
   brandingLogoUrl?: string;
+  heroImageUrl?: string;
 }
 
 export interface User {

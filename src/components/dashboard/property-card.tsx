@@ -10,9 +10,8 @@ interface PropertyCardProps {
 }
 
 export default function PropertyCard({ property }: PropertyCardProps) {
-  const hasImages = property.images.length > 0;
-  const imageUrl = hasImages ? property.images[0].url : 'https://placehold.co/600x400.png';
-  const imageHint = hasImages ? 'property exterior' : 'modern property';
+  const imageUrl = property.heroImageUrl || '/default-property-image.png';
+  const imageHint = property.heroImageUrl ? 'property exterior' : '360 camera walkthrough';
 
   return (
     <Card className="flex flex-col overflow-hidden shadow-lg transition-transform duration-300 hover:scale-105 hover:shadow-xl">

@@ -20,6 +20,7 @@ export const mockProperties: Property[] = [
     },
     tourUrl: 'https://kuula.co/share/collection/7q1vF?logo=1&info=1&fs=1&vr=0&sd=1&thumbs=1',
     brandingLogoUrl: 'https://placehold.co/150x50.png',
+    heroImageUrl: 'https://placehold.co/600x400.png',
     images: [
       { 
         id: 'img-1-1', 
