@@ -208,7 +208,7 @@ export default function LandingPage() {
             <div className="grid grid-cols-1 items-center gap-12 md:grid-cols-2">
               <div>
                 <Image
-                  src="https://placehold.co/600x500.png"
+                  src="/epc-certificate.png"
                   alt="Example of an EPC certificate"
                   width={600}
                   height={500}
