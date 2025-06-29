@@ -7,7 +7,7 @@ import { Button } from '@/components/ui/button';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import { searchEpcs, getCertificate, DomesticSearchResult, DomesticCertificate } from './actions';
-import { Loader2, Search, FileText } from 'lucide-react';
+import { Loader2, Search, FileText, Download } from 'lucide-react';
 
 const EnergyRatingBadge = ({ rating }: { rating: string }) => {
   const ratingColors: { [key: string]: string } = {
@@ -66,33 +66,45 @@ const EnergyRatingChart = ({ value, isPotential = false }: { value: number, isPo
 };
 
 
-const CertificateDetails = ({ certificate }: { certificate: DomesticCertificate }) => (
-    <div className="space-y-4">
-        <div>
-            <h4 className="font-semibold text-sm mb-2">Energy efficiency rating</h4>
-            <div className='space-y-2'>
-                <EnergyRatingChart value={certificate['current-energy-efficiency']} />
-                <EnergyRatingChart value={certificate['potential-energy-efficiency']} isPotential />
+const CertificateDetails = ({ certificate }: { certificate: DomesticCertificate }) => {
+    const downloadUrl = `https://find-energy-certificate.service.gov.uk/energy-certificate/${certificate['lmk-key']}`;
+
+    return (
+        <div className="w-full space-y-4">
+            <div>
+                <h4 className="font-semibold text-sm mb-2">Energy efficiency rating</h4>
+                <div className='space-y-2'>
+                    <EnergyRatingChart value={certificate['current-energy-efficiency']} />
+                    <EnergyRatingChart value={certificate['potential-energy-efficiency']} isPotential />
+                </div>
+                 <div className="flex items-center gap-4 mt-2 text-xs">
+                    <div className="flex items-center gap-2"><div className="w-3 h-3 rounded-sm bg-black" /> Current</div>
+                    <div className="flex items-center gap-2"><div className="w-3 h-3 rounded-sm bg-blue-600" /> Potential</div>
+                </div>
             </div>
-             <div className="flex items-center gap-4 mt-2 text-xs">
-                <div className="flex items-center gap-2"><div className="w-3 h-3 rounded-sm bg-black" /> Current</div>
-                <div className="flex items-center gap-2"><div className="w-3 h-3 rounded-sm bg-blue-600" /> Potential</div>
+            <div className="rounded-lg border bg-muted/50 p-4">
+                <h4 className="font-semibold mb-2">Property Details</h4>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-x-4 gap-y-2 text-sm">
+                    <p><strong>Address:</strong> {certificate.address}, {certificate.postcode}</p>
+                    <p><strong>Property Type:</strong> {certificate['property-type']}</p>
+                    <p><strong>Built Form:</strong> {certificate['built-form']}</p>
+                    <p><strong>Total Floor Area:</strong> {certificate['total-floor-area']} m²</p>
+                    <p><strong>Local Authority:</strong> {certificate['local-authority-label']}</p>
+                    <p><strong>Valid Until:</strong> {new Date(certificate['expiry-date']).toLocaleDateString()}</p>
+                    <p className="col-span-full"><strong>Certificate Key:</strong> <span className="font-mono text-xs">{certificate['lmk-key']}</span></p>
+                </div>
+            </div>
+            <div className="flex justify-end pt-2">
+                <Button asChild>
+                    <a href={downloadUrl} target="_blank" rel="noopener noreferrer">
+                        <Download className="mr-2 h-4 w-4" />
+                        Download Certificate
+                    </a>
+                </Button>
             </div>
         </div>
-        <div className="rounded-lg border bg-muted/50 p-4">
-            <h4 className="font-semibold mb-2">Property Details</h4>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-x-4 gap-y-2 text-sm">
-                <p><strong>Address:</strong> {certificate.address}, {certificate.postcode}</p>
-                <p><strong>Property Type:</strong> {certificate['property-type']}</p>
-                <p><strong>Built Form:</strong> {certificate['built-form']}</p>
-                <p><strong>Total Floor Area:</strong> {certificate['total-floor-area']} m²</p>
-                <p><strong>Local Authority:</strong> {certificate['local-authority-label']}</p>
-                <p><strong>Valid Until:</strong> {new Date(certificate['expiry-date']).toLocaleDateString()}</p>
-                <p className="col-span-full"><strong>Certificate Key:</strong> <span className="font-mono text-xs">{certificate['lmk-key']}</span></p>
-            </div>
-        </div>
-    </div>
-);
+    );
+};
 
 export default function EpcPage() {
   const [postcode, setPostcode] = useState('');
