@@ -24,11 +24,11 @@ export default function LandingPage() {
         <section className="relative py-20 md:py-32">
           <div className="absolute inset-0 z-0">
             <Image
-              src="https://placehold.co/1920x1080.png"
-              alt="A cozy bedroom in a modern property"
+              src="/hero-image.png"
+              alt="A tablet showcasing the 360 Walkthrough application interface"
               fill
               className="object-cover"
-              data-ai-hint="cozy bedroom"
+              data-ai-hint="app interface"
             />
             <div className="absolute inset-0 bg-black/60" />
           </div>
