@@ -244,12 +244,12 @@ export default function LandingPage() {
               </div>
               <div className="order-1 md:order-2">
                 <Image
-                  src="https://placehold.co/600x500.png"
-                  alt="Portrait of the founder, Cristina Axford"
+                  src="/empowering-agents.png"
+                  alt="An estate agent using a computer to create a virtual property tour"
                   width={600}
                   height={500}
                   className="rounded-lg shadow-xl"
-                  data-ai-hint="professional portrait"
+                  data-ai-hint="estate agent computer"
                 />
               </div>
             </div>
