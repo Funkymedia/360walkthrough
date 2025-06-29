@@ -23,6 +23,7 @@ import {
   PlusCircle,
   Settings,
   FileCheck,
+  CreditCard,
 } from 'lucide-react';
 import { mockUser } from '@/lib/data';
 import Logo from '@/components/Logo';
@@ -41,6 +42,7 @@ export default function DashboardLayout({
     { href: '/dashboard', label: 'Dashboard', icon: LayoutDashboard },
     { href: '/dashboard/properties', label: 'Properties', icon: Building2 },
     { href: '/dashboard/epcs', label: 'EPCs', icon: FileCheck },
+    { href: '/dashboard/billing', label: 'Billing', icon: CreditCard },
     { href: '/dashboard/referrals', label: 'Referrals', icon: Gift },
   ];
 
@@ -55,7 +57,7 @@ export default function DashboardLayout({
             {navItems.map((item) => (
               <Link key={item.href} href={item.href}>
                 <Button
-                  variant={pathname === item.href ? 'default' : 'ghost'}
+                  variant={pathname.startsWith(item.href) && (item.href !== '/dashboard' || pathname === '/dashboard') ? 'default' : 'ghost'}
                   className="w-full justify-start"
                 >
                   <item.icon className="mr-2 h-4 w-4" />

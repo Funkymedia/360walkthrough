@@ -14,6 +14,7 @@ import {
   PlusCircle,
   Gift,
   FileCheck,
+  CreditCard,
 } from 'lucide-react';
 import Logo from '../Logo';
 import { usePathname } from 'next/navigation';
@@ -26,6 +27,7 @@ export default function DashboardHeader() {
     { href: '/dashboard', label: 'Dashboard', icon: LayoutDashboard },
     { href: '/dashboard/properties', label: 'Properties', icon: Building2 },
     { href: '/dashboard/epcs', label: 'EPCs', icon: FileCheck },
+    { href: '/dashboard/billing', label: 'Billing', icon: CreditCard },
     { href: '/dashboard/referrals', label: 'Referrals', icon: Gift },
   ];
 
