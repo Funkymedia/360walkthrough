@@ -135,12 +135,12 @@ export default function LandingPage() {
             <div className="grid grid-cols-1 items-center gap-12 md:grid-cols-2">
               <div>
                 <Image
-                  src="https://placehold.co/600x500.png"
-                  alt="Example of a 360 virtual tour"
+                  src="/virtual-tour-enhance.png"
+                  alt="A virtual tour of a modern home shown on a tablet screen"
                   width={600}
                   height={500}
                   className="rounded-lg shadow-xl"
-                  data-ai-hint="virtual tour property"
+                  data-ai-hint="virtual tour app"
                 />
               </div>
               <div>
