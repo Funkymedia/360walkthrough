@@ -160,6 +160,7 @@ export function PropertiesProvider({ children }: { children: ReactNode }) {
         return new Promise((resolve) => {
             const newImage: StandardPropertyImage = {
                 id: `s-img-${Date.now()}`,
+                name: imageFile.name,
                 url: URL.createObjectURL(imageFile),
             };
             setProperties((prev) =>

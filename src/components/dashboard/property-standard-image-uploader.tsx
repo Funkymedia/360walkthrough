@@ -116,8 +116,8 @@ export default function PropertyStandardImageUploader({ property }: { property: 
                 <div className="grid grid-cols-1 gap-6">
                     {(property.standardImages || []).map((image) => (
                         <Card key={image.id} className="overflow-hidden">
-                             <CardHeader className="flex flex-row items-center justify-between p-4 bg-muted/50">
-                                <p className="font-semibold">Retouch Image</p>
+                             <CardHeader className="flex flex-row items-center justify-between p-4 bg-muted/50 gap-4">
+                                <p className="font-semibold truncate" title={image.name}>{image.name}</p>
                                 <AlertDialog>
                                     <AlertDialogTrigger asChild>
                                         <Button size="icon" variant="ghost" className="h-7 w-7 text-destructive hover:bg-destructive/10 hover:text-destructive">

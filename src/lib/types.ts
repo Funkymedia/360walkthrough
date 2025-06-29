@@ -17,6 +17,7 @@ export interface PropertyImage {
 
 export interface StandardPropertyImage {
   id: string;
+  name: string;
   url: string;
   editedUrl?: string;
   instructions?: string;
