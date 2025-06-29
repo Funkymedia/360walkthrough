@@ -40,6 +40,7 @@ export const mockProperties: Property[] = [
         ]
       },
     ],
+    standardImages: [],
     floorPlans: [
       { id: 'fp-1-1', name: 'Ground Floor', url: 'https://placehold.co/800x600.png' },
       { id: 'fp-1-2', name: 'First Floor', url: 'https://placehold.co/800x600.pdf' }
@@ -58,6 +59,7 @@ export const mockProperties: Property[] = [
     images: [
       { id: 'img-2-1', url: 'https://placehold.co/600x400.png', tags: ['exterior', 'suburban', 'brick'] },
     ],
+    standardImages: [],
     floorPlans: [],
   },
   {
@@ -71,6 +73,7 @@ export const mockProperties: Property[] = [
       phone: '07700 900456',
     },
     images: [],
+    standardImages: [],
     floorPlans: [
         { id: 'fp-3-1', name: 'Main Floor', url: 'https://placehold.co/800x600.png' }
     ],

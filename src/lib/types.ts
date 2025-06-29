@@ -15,6 +15,13 @@ export interface PropertyImage {
   };
 }
 
+export interface StandardPropertyImage {
+  id: string;
+  url: string;
+  editedUrl?: string;
+  instructions?: string;
+}
+
 export interface FloorPlan {
   id: string;
   name: string;
@@ -32,6 +39,7 @@ export interface Property {
     phone: string;
   };
   images: PropertyImage[];
+  standardImages?: StandardPropertyImage[];
   floorPlans?: FloorPlan[];
   tourUrl?: string;
   brandingLogoUrl?: string;

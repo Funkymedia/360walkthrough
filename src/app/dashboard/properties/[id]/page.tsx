@@ -4,8 +4,9 @@ import { useProperties } from '@/contexts/properties-context';
 import { notFound, useParams } from 'next/navigation';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription, CardFooter } from '@/components/ui/card';
-import { Building, User, Phone, Mail, PlusCircle, Download, FileText, Camera, Orbit, ExternalLink, Trash2, Pencil, Check, X, Facebook, Linkedin, Instagram } from 'lucide-react';
+import { Building, User, Phone, Mail, PlusCircle, Download, FileText, Camera, Orbit, ExternalLink, Trash2, Pencil, Check, X, Facebook, Linkedin, Instagram, Wand2 } from 'lucide-react';
 import PropertyImageUploader from '@/components/dashboard/property-image-uploader';
+import PropertyStandardImageUploader from '@/components/dashboard/property-standard-image-uploader';
 import FloorPlanUploader from '@/components/dashboard/floor-plan-uploader';
 import Image from 'next/image';
 import { Button } from '@/components/ui/button';
@@ -206,11 +207,15 @@ export default function PropertyDetailPage() {
       </div>
 
       <Tabs defaultValue="details">
-        <TabsList className="grid w-full grid-cols-4">
+        <TabsList className="grid w-full grid-cols-5">
           <TabsTrigger value="details">Details</TabsTrigger>
           <TabsTrigger value="images" className="font-semibold data-[state=active]:bg-primary data-[state=active]:text-primary-foreground">
             <Camera className="mr-2 h-4 w-4" />
             360° Images
+          </TabsTrigger>
+          <TabsTrigger value="retouching">
+            <Wand2 className="mr-2 h-4 w-4" />
+            Image Retouching
           </TabsTrigger>
           <TabsTrigger value="floorplan">Floor Plans</TabsTrigger>
           <TabsTrigger value="tour">
@@ -358,6 +363,9 @@ export default function PropertyDetailPage() {
               </CardFooter>
             </Card>
           )}
+        </TabsContent>
+        <TabsContent value="retouching" className="mt-6">
+          <PropertyStandardImageUploader property={property} />
         </TabsContent>
         <TabsContent value="floorplan" className="mt-6">
           <Card>

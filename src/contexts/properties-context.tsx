@@ -2,7 +2,7 @@
 
 import { createContext, useState, useContext, ReactNode } from 'react';
 import { mockProperties } from '@/lib/data';
-import type { Property, FloorPlan, PropertyImage } from '@/lib/types';
+import type { Property, FloorPlan, PropertyImage, StandardPropertyImage } from '@/lib/types';
 import type { PropertyFormValues } from '@/components/dashboard/property-form';
 
 export type FloorPlanFormValues = { name: string; file: File };
@@ -16,6 +16,9 @@ interface PropertiesContextType {
     addImage: (propertyId: string, imageFile: File) => Promise<PropertyImage>;
     updateImage: (propertyId: string, updatedImage: PropertyImage) => void;
     deleteImage: (propertyId: string, imageId: string) => void;
+    addStandardImage: (propertyId: string, imageFile: File) => Promise<StandardPropertyImage>;
+    updateStandardImage: (propertyId: string, updatedImage: StandardPropertyImage) => void;
+    deleteStandardImage: (propertyId: string, imageId: string) => void;
 }
 
 const PropertiesContext = createContext<PropertiesContextType | undefined>(undefined);
@@ -35,6 +38,7 @@ export function PropertiesProvider({ children }: { children: ReactNode }) {
                 phone: data.contactPhone,
             },
             images: [],
+            standardImages: [],
             floorPlans: [],
             brandingLogoUrl: data.brandingLogo?.[0] ? URL.createObjectURL(data.brandingLogo[0]) : undefined,
         };
@@ -152,8 +156,58 @@ export function PropertiesProvider({ children }: { children: ReactNode }) {
         );
       };
 
+    const addStandardImage = (propertyId: string, imageFile: File): Promise<StandardPropertyImage> => {
+        return new Promise((resolve) => {
+            const newImage: StandardPropertyImage = {
+                id: `s-img-${Date.now()}`,
+                url: URL.createObjectURL(imageFile),
+            };
+            setProperties((prev) =>
+                prev.map((p) => {
+                    if (p.id === propertyId) {
+                        return {
+                            ...p,
+                            standardImages: [...(p.standardImages || []), newImage],
+                        };
+                    }
+                    return p;
+                })
+            );
+            resolve(newImage);
+        });
+    };
+
+    const updateStandardImage = (propertyId: string, updatedImage: StandardPropertyImage) => {
+        setProperties((prev) =>
+            prev.map((p) => {
+                if (p.id === propertyId) {
+                    return {
+                        ...p,
+                        standardImages: (p.standardImages || []).map((img) => (img.id === updatedImage.id ? updatedImage : img)),
+                    };
+                }
+                return p;
+            })
+        );
+    };
+
+    const deleteStandardImage = (propertyId: string, imageId: string) => {
+        setProperties((prev) =>
+            prev.map((p) => {
+                if (p.id === propertyId) {
+                    return {
+                        ...p,
+                        standardImages: (p.standardImages || []).filter((img) => img.id !== imageId),
+                    };
+                }
+                return p;
+            })
+        );
+    };
+
+
     return (
-        <PropertiesContext.Provider value={{ properties, addProperty, updateProperty, addFloorPlan, deleteFloorPlan, addImage, updateImage, deleteImage }}>
+        <PropertiesContext.Provider value={{ properties, addProperty, updateProperty, addFloorPlan, deleteFloorPlan, addImage, updateImage, deleteImage, addStandardImage, updateStandardImage, deleteStandardImage }}>
             {children}
         </PropertiesContext.Provider>
     );
