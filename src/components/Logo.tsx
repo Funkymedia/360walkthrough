@@ -4,53 +4,37 @@ const Logo = () => {
   return (
     <Link href="/" className="flex items-center gap-2">
       <svg
-        className="h-10 w-auto"
-        viewBox="0 0 174 121"
+        className="h-9 w-auto"
+        viewBox="0 0 160 80"
         fill="none"
         xmlns="http://www.w3.org/2000/svg"
       >
-        <style>{`
-          .logo-360-text {
-            font-family: sans-serif;
-            font-size: 52px;
-            font-weight: bold;
-            fill: black;
-            text-anchor: middle;
-          }
-          .logo-walkthrough-text {
-            font-family: sans-serif;
-            font-size: 24px;
-            fill: black;
-            text-anchor: middle;
-          }
-        `}</style>
-        <path
-          d="M7 114V60L87 7L167 60V114"
-          stroke="black"
-          strokeWidth="10"
-          strokeLinecap="round"
-          strokeLinejoin="round"
-        />
-        <text x="87" y="80" className="logo-360-text">
-          360
-          <tspan fontSize="32" dy="-20">°</tspan>
-        </text>
-        <path
-          d="M40 92C40 82, 134 82, 134 92"
-          stroke="#C49C68"
-          strokeWidth="10"
-          strokeLinecap="round"
-        />
-        <path
-          d="M124 88L134 92L128 102"
-          stroke="#C49C68"
-          strokeWidth="10"
-          strokeLinecap="round"
-          strokeLinejoin="round"
-        />
-        <text x="87" y="110" className="logo-walkthrough-text">
-          walkthrough
-        </text>
+        <g className="text-foreground">
+          {/* Camera */}
+          <rect x="10" y="10" width="28" height="60" rx="6" stroke="currentColor" strokeWidth="3" />
+          <circle cx="24" cy="26" r="7" stroke="currentColor" strokeWidth="3" />
+          <circle cx="24" cy="45" r="4" stroke="currentColor" strokeWidth="3" />
+          <rect x="17" y="58" width="14" height="6" rx="2" stroke="currentColor" strokeWidth="3" />
+        </g>
+        <g className="text-primary">
+          {/* 360 arrow */}
+          <path
+            d="M60 68 C 40 68, 40 20, 70 12 C 100 4, 130 15, 140 40"
+            stroke="currentColor"
+            strokeWidth="7"
+            strokeLinecap="round"
+            fill="none"
+          />
+          <path
+            d="M132 46L140 40L145 30"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="7"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+          />
+          <circle cx="120" cy="10" r="3.5" fill="currentColor" />
+        </g>
       </svg>
     </Link>
   );
