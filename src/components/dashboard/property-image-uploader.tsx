@@ -8,7 +8,7 @@ import { Input } from '@/components/ui/input';
 import { Badge } from '@/components/ui/badge';
 import { Label } from '@/components/ui/label';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { UploadCloud, Loader2, X, Pin, Waypoints, ArrowRight, Trash2 } from 'lucide-react';
+import { UploadCloud, Loader2, X, Pin, Waypoints, ArrowRight, Trash2, Orbit } from 'lucide-react';
 import Image from 'next/image';
 import { Property, PropertyImage, ImagePath } from '@/lib/types';
 import { useToast } from '@/hooks/use-toast';
@@ -27,9 +27,11 @@ import {
 
 interface PropertyImageUploaderProps {
   property: Property;
+  onGenerateTour: () => void;
+  isGeneratingTour: boolean;
 }
 
-export default function PropertyImageUploader({ property }: PropertyImageUploaderProps) {
+export default function PropertyImageUploader({ property, onGenerateTour, isGeneratingTour }: PropertyImageUploaderProps) {
   const { addImage, updateImage, deleteImage } = useProperties();
   const [isGenerating, setIsGenerating] = useState<Record<string, boolean>>({});
   const fileInputRef = useRef<HTMLInputElement>(null);
@@ -230,6 +232,37 @@ export default function PropertyImageUploader({ property }: PropertyImageUploade
               onChange={handleFileChange}
             />
           </div>
+        </div>
+        <div className="mt-8 flex flex-col items-center justify-center border-t pt-6">
+            <h3 className="mb-2 text-lg font-semibold">Ready to Build Your Tour?</h3>
+            <p className="max-w-md text-center text-muted-foreground mb-4">Once you've uploaded and configured your images, you can generate the interactive 360° tour.</p>
+            <AlertDialog>
+                <AlertDialogTrigger asChild>
+                    <Button size="lg" disabled={property.images.length === 0 || isGeneratingTour}>
+                        {isGeneratingTour ? (
+                        <Loader2 className="mr-2 h-5 w-5 animate-spin" />
+                        ) : (
+                        <Orbit className="mr-2 h-5 w-5" />
+                        )}
+                        Generate 360° Tour
+                    </Button>
+                </AlertDialogTrigger>
+                <AlertDialogContent>
+                    <AlertDialogHeader>
+                        <AlertDialogTitle>Generate Virtual Tour?</AlertDialogTitle>
+                        <AlertDialogDescription>
+                        This will submit your uploaded images to the RICOH 360 service to create a virtual tour. This process may take a few minutes. Are you sure you want to proceed?
+                        </AlertDialogDescription>
+                    </AlertDialogHeader>
+                    <AlertDialogFooter>
+                        <AlertDialogCancel>Cancel</AlertDialogCancel>
+                        <AlertDialogAction onClick={onGenerateTour}>
+                        Proceed
+                        </AlertDialogAction>
+                    </AlertDialogFooter>
+                </AlertDialogContent>
+            </AlertDialog>
+            {property.images.length === 0 && <p className="mt-2 text-xs text-destructive">Please upload at least one 360° image to generate a tour.</p>}
         </div>
       </CardContent>
     </Card>
