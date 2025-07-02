@@ -418,7 +418,7 @@ export default function PropertyDetailPage() {
                         <DialogHeader>
                             <DialogTitle>Request a New Floor Plan</DialogTitle>
                             <DialogDescription>
-                                Submit a request to our team to create a professional floor plan for this property.
+                                Submit a request to our team to create a professional floor plan from your uploaded 360° images.
                             </DialogDescription>
                         </DialogHeader>
                         <RequestFloorPlanForm onSuccess={() => setIsRequestFloorPlanOpen(false)} />

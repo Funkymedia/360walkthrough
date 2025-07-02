@@ -42,7 +42,7 @@ export default function RequestFloorPlanForm({ onSuccess }: RequestFloorPlanForm
           onChange={(e) => setNotes(e.target.value)}
           rows={4}
         />
-        <p className="text-sm text-muted-foreground">You will be contacted to arrange the floor plan creation. Please ensure you have uploaded the necessary 360° images.</p>
+        <p className="text-sm text-muted-foreground">Our team will use your uploaded 360° photos to generate an accurate floor plan. You will be contacted once it's complete.</p>
       </div>
       <div className="flex justify-end">
         <Button type="submit" disabled={isSubmitting}>
