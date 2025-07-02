@@ -7,7 +7,8 @@ import { Card, CardContent, CardHeader, CardTitle, CardDescription, CardFooter }
 import { Building, User, Phone, Mail, PlusCircle, Download, FileText, Camera, Orbit, ExternalLink, Trash2, Pencil, Check, X, Facebook, Linkedin, Instagram, Wand2, Loader2, Film } from 'lucide-react';
 import PropertyImageUploader from '@/components/dashboard/property-image-uploader';
 import PropertyStandardImageUploader from '@/components/dashboard/property-standard-image-uploader';
-import FloorPlanUploader from '@/components/dashboard/floor-plan-uploader';
+import ImageRetouchingDemo from '@/components/dashboard/image-retouching-demo';
+import RequestFloorPlanForm from '@/components/dashboard/request-floor-plan-form';
 import Image from 'next/image';
 import { Button } from '@/components/ui/button';
 import {
@@ -44,7 +45,7 @@ export default function PropertyDetailPage() {
   const { toast } = useToast();
   const property = properties.find((p) => p.id === params.id);
   
-  const [isUploadDialogOpen, setIsUploadDialogOpen] = useState(false);
+  const [isRequestFloorPlanOpen, setIsRequestFloorPlanOpen] = useState(false);
   
   const [isEditingName, setIsEditingName] = useState(false);
   const [name, setName] = useState(property?.name || '');
@@ -317,7 +318,6 @@ export default function PropertyDetailPage() {
               </div>
             </CardContent>
           </Card>
-          <RequestChangesForm />
         </TabsContent>
         <TabsContent value="images" className="mt-6 space-y-6">
           <PropertyImageUploader property={property} onGenerateTour={handleGenerateTour} isGeneratingTour={isGeneratingTour} />
@@ -395,8 +395,10 @@ export default function PropertyDetailPage() {
             </Card>
           )}
         </TabsContent>
-        <TabsContent value="retouching" className="mt-6">
-          <PropertyStandardImageUploader property={property} />
+        <TabsContent value="retouching" className="mt-6 space-y-6">
+            <ImageRetouchingDemo />
+            <PropertyStandardImageUploader property={property} />
+            <RequestChangesForm />
         </TabsContent>
         <TabsContent value="video-maker" className="mt-6">
           <AiVideoMaker property={property} />
@@ -408,18 +410,18 @@ export default function PropertyDetailPage() {
                     <CardTitle>Floor Plans</CardTitle>
                     <CardDescription>Manage the property's floor plans.</CardDescription>
                 </div>
-                <Dialog open={isUploadDialogOpen} onOpenChange={setIsUploadDialogOpen}>
+                <Dialog open={isRequestFloorPlanOpen} onOpenChange={setIsRequestFloorPlanOpen}>
                     <DialogTrigger asChild>
-                        <Button><PlusCircle className="mr-2 h-4 w-4" /> Add Floor Plan</Button>
+                        <Button><PlusCircle className="mr-2 h-4 w-4" /> Request Floor Plan</Button>
                     </DialogTrigger>
                     <DialogContent>
                         <DialogHeader>
-                            <DialogTitle>Upload New Floor Plan</DialogTitle>
+                            <DialogTitle>Request a New Floor Plan</DialogTitle>
                             <DialogDescription>
-                                Select a new image (JPEG) or PDF file and give it a name.
+                                Submit a request to our team to create a professional floor plan for this property.
                             </DialogDescription>
                         </DialogHeader>
-                        <FloorPlanUploader propertyId={property.id} onUploadSuccess={() => setIsUploadDialogOpen(false)} />
+                        <RequestFloorPlanForm onSuccess={() => setIsRequestFloorPlanOpen(false)} />
                     </DialogContent>
                 </Dialog>
             </CardHeader>
@@ -476,9 +478,15 @@ export default function PropertyDetailPage() {
                     </div>
                 ) : (
                     <div className="flex flex-col items-center justify-center rounded-lg border-2 border-dashed border-muted-foreground/30 bg-card p-12 text-center">
-                        <h3 className="text-xl font-semibold">No Floor Plans Found</h3>
+                        <div className="mb-8 w-full max-w-md">
+                          <p className="text-sm font-semibold mb-2">Example Floor Plan</p>
+                          <div className="relative aspect-[4/3] w-full overflow-hidden rounded-lg border">
+                              <Image src="https://placehold.co/800x600.png" alt="Example Floor Plan" fill className="object-contain" data-ai-hint="floor plan diagram" />
+                          </div>
+                        </div>
+                        <h3 className="text-xl font-semibold mt-4">No Floor Plans Found</h3>
                         <p className="mt-2 text-muted-foreground">
-                            Click "Add Floor Plan" to get started.
+                            Click "Request Floor Plan" to have our team create one for you.
                         </p>
                     </div>
                 )}

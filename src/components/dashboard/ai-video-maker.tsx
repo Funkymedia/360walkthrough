@@ -7,9 +7,10 @@ import { Checkbox } from '@/components/ui/checkbox';
 import { Label } from '@/components/ui/label';
 import { Property } from '@/lib/types';
 import Image from 'next/image';
-import { Film, Sparkles, AlertCircle } from 'lucide-react';
+import { Film, Sparkles, AlertCircle, Wand2 } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 import { Tooltip, TooltipProvider, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip';
+import { Badge } from '../ui/badge';
 
 interface AiVideoMakerProps {
   property: Property;
@@ -42,7 +43,7 @@ export default function AiVideoMaker({ property }: AiVideoMakerProps) {
       <CardHeader>
         <CardTitle>AI Marketing Video Maker</CardTitle>
         <CardDescription>
-          Create a professional marketing video from your property photos using AI. Select up to 15 photos to begin.
+          Create a professional marketing video from your property photos using AI. Select up to 15 photos to begin. Retouched photos will be used where available.
         </CardDescription>
       </CardHeader>
       <CardContent className="space-y-6">
@@ -58,12 +59,18 @@ export default function AiVideoMaker({ property }: AiVideoMakerProps) {
                   >
                     <div className="relative aspect-video w-full overflow-hidden rounded-md">
                       <Image
-                        src={image.url}
+                        src={image.editedUrl || image.url}
                         alt={image.name}
                         fill
                         className="object-cover transition-transform group-hover:scale-105"
                         data-ai-hint="property room"
                       />
+                      {image.editedUrl && (
+                        <Badge variant="default" className="absolute bottom-2 left-2 z-10">
+                          <Wand2 className="h-3 w-3 mr-1" />
+                          Retouched
+                        </Badge>
+                      )}
                       <div className="absolute inset-0 bg-black/20 opacity-0 transition-opacity group-has-[:checked]:opacity-100" />
                     </div>
                     <Checkbox

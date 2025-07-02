@@ -33,9 +33,13 @@ const prompt = ai.definePrompt({
   name: 'generateImageTagsPrompt',
   input: {schema: GenerateImageTagsInputSchema},
   output: {schema: GenerateImageTagsOutputSchema},
-  prompt: `You are an expert in real estate and photography. Generate descriptive tags for the following 360 image of a property.  These tags will be used to help users find the property they are looking for.
+  prompt: `You are an expert real estate agent. Your task is to generate descriptive and marketable tags for a 360° property image.
 
-Consider the location, the style of the property, the type of room, and any notable features.
+Focus on features that buyers look for. Identify the room type (e.g., "Kitchen", "Master Bedroom", "Garden").
+Note key features (e.g., "Hardwood Floors", "Natural Light", "Open-Plan", "Fireplace", "Breakfast Bar", "City View").
+Mention style or condition (e.g., "Modern", "Newly-Renovated", "Cosy", "Spacious").
+
+Generate a concise list of 3-5 high-impact tags.
 
 Return only the tags themselves, as a JSON array of strings.
 

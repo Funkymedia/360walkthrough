@@ -172,13 +172,13 @@ export default function PropertyImageUploader({ property, onGenerateTour, isGene
                     <div className="space-y-2">
                         <Label className="flex items-center gap-2 text-sm"><Pin className="h-4 w-4 text-muted-foreground"/> Starting View</Label>
                         <div className="flex gap-2">
-                            <Input type="number" placeholder="Pitch" defaultValue={image.startingView?.pitch} className="text-xs h-8" />
-                            <Input type="number" placeholder="Yaw" defaultValue={image.startingView?.yaw} className="text-xs h-8" />
+                            <Input type="number" placeholder="Pitch" defaultValue={image.startingView?.pitch ?? 0} className="text-xs h-8" />
+                            <Input type="number" placeholder="Yaw" defaultValue={image.startingView?.yaw ?? 0} className="text-xs h-8" />
                         </div>
                     </div>
 
                     <div className="space-y-2">
-                        <Label className="flex items-center gap-2 text-sm"><Waypoints className="h-4 w-4 text-muted-foreground"/> Hotspots (Paths)</Label>
+                        <Label className="flex items-center gap-2 text-sm"><Waypoints className="h-4 w-4 text-muted-foreground"/> Hotspots (Paths to other images)</Label>
                         <div className="space-y-1">
                             {image.paths?.map(path => (
                                 <div key={path.id} className="flex items-center justify-between text-xs bg-muted/50 p-1.5 rounded-md">
@@ -196,10 +196,10 @@ export default function PropertyImageUploader({ property, onGenerateTour, isGene
                              )}
                         </div>
                         <form className="flex gap-2 pt-2 items-center">
-                            <Input placeholder="Hotspot Name" className="h-8 text-xs flex-grow" />
+                            <Input placeholder="e.g. 'To the kitchen'" className="h-8 text-xs flex-grow" />
                             <Select>
                                 <SelectTrigger className="h-8 text-xs w-[120px] shrink-0">
-                                    <SelectValue placeholder="Link to..." />
+                                    <SelectValue placeholder="Link to Image..." />
                                 </SelectTrigger>
                                 <SelectContent>
                                     {property.images.filter(i => i.id !== image.id).map(targetImage => (

@@ -11,24 +11,28 @@ const quickLinks = [
     description: 'Manage your property listings, add new ones, and import from Alto.',
     href: '/dashboard/properties',
     icon: Building2,
+    buttonText: 'Manage Properties',
   },
   {
     title: '360° Walkthroughs',
     description: 'Upload 360° images and generate immersive virtual tours.',
     href: '/dashboard/properties',
     icon: Orbit,
+    buttonText: 'Create Tours',
   },
   {
     title: 'EPC Lookup',
     description: 'Search for and download Energy Performance Certificates for any UK property.',
     href: '/dashboard/epcs',
     icon: FileCheck,
+    buttonText: 'Search EPCs',
   },
   {
     title: '360 Social Pilot',
     description: 'Generate and schedule AI-powered social media posts for your listings.',
     href: '/dashboard/social-pilot',
     icon: Megaphone,
+    buttonText: 'Create Posts',
   },
 ];
 
@@ -59,7 +63,7 @@ export default function DashboardPage() {
             <CardFooter>
               <Button asChild className="w-full">
                 <Link href={link.href}>
-                  <span>Go to Section</span>
+                  <span>{link.buttonText}</span>
                   <ArrowRight className="ml-auto" />
                 </Link>
               </Button>
