@@ -12,6 +12,7 @@ interface PropertiesContextType {
     addProperty: (propertyData: PropertyFormValues) => void;
     updateProperty: (propertyId: string, propertyData: PropertyFormValues) => void;
     updateTourUrl: (propertyId: string, tourUrl: string) => void;
+    importProperties: (newProperties: Property[]) => void;
     addFloorPlan: (propertyId: string, floorPlanData: FloorPlanFormValues) => void;
     deleteFloorPlan: (propertyId: string, floorPlanId: string) => void;
     addImage: (propertyId: string, imageFile: File) => Promise<PropertyImage>;
@@ -84,6 +85,14 @@ export function PropertiesProvider({ children }: { children: ReactNode }) {
                 return p;
             })
         );
+    };
+
+    const importProperties = (newProperties: Property[]) => {
+        setProperties(prev => {
+            const existingIds = new Set(prev.map(p => p.id));
+            const uniqueNewProperties = newProperties.filter(p => !existingIds.has(p.id));
+            return [...uniqueNewProperties, ...prev];
+        });
     };
 
     const addFloorPlan = (propertyId: string, floorPlanData: FloorPlanFormValues) => {
@@ -224,7 +233,7 @@ export function PropertiesProvider({ children }: { children: ReactNode }) {
 
 
     return (
-        <PropertiesContext.Provider value={{ properties, addProperty, updateProperty, updateTourUrl, addFloorPlan, deleteFloorPlan, addImage, updateImage, deleteImage, addStandardImage, updateStandardImage, deleteStandardImage }}>
+        <PropertiesContext.Provider value={{ properties, addProperty, updateProperty, updateTourUrl, importProperties, addFloorPlan, deleteFloorPlan, addImage, updateImage, deleteImage, addStandardImage, updateStandardImage, deleteStandardImage }}>
             {children}
         </PropertiesContext.Provider>
     );
