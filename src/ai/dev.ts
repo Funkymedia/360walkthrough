@@ -3,3 +3,4 @@ config();
 
 import '@/ai/flows/generate-image-tags.ts';
 import '@/ai/flows/remove-image-objects.ts';
+import '@/ai/flows/generate-social-post.ts';
