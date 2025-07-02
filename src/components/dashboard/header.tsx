@@ -15,6 +15,7 @@ import {
   Gift,
   FileCheck,
   CreditCard,
+  Megaphone,
 } from 'lucide-react';
 import Logo from '../Logo';
 import { usePathname } from 'next/navigation';
@@ -26,6 +27,7 @@ export default function DashboardHeader() {
   const navItems = [
     { href: '/dashboard', label: 'Dashboard', icon: LayoutDashboard },
     { href: '/dashboard/properties', label: 'Properties', icon: Building2 },
+    { href: '/dashboard/social-pilot', label: 'Social Media', icon: Megaphone },
     { href: '/dashboard/epcs', label: 'EPCs', icon: FileCheck },
     { href: '/dashboard/billing', label: 'Billing', icon: CreditCard },
     { href: '/dashboard/referrals', label: 'Referrals', icon: Gift },
@@ -66,7 +68,7 @@ export default function DashboardHeader() {
         </SheetContent>
       </Sheet>
        <div className="flex-1">
-          <h1 className="text-lg font-semibold md:text-2xl capitalize">{pathSegments[pathSegments.length - 1]}</h1>
+          <h1 className="text-lg font-semibold md:text-2xl capitalize">{pathSegments.length > 1 ? pathSegments[1].replace('-', ' ') : 'Dashboard'}</h1>
        </div>
     </header>
   );

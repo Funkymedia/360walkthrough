@@ -42,7 +42,7 @@ export default function DashboardLayout({
   const navItems = [
     { href: '/dashboard', label: 'Dashboard', icon: LayoutDashboard },
     { href: '/dashboard/properties', label: 'Properties', icon: Building2 },
-    { href: '/dashboard/social-pilot', label: '360 Social Pilot', icon: Megaphone },
+    { href: '/dashboard/social-pilot', label: 'Social Media', icon: Megaphone },
     { href: '/dashboard/epcs', label: 'EPCs', icon: FileCheck },
     { href: '/dashboard/billing', label: 'Billing', icon: CreditCard },
     { href: '/dashboard/referrals', label: 'Referrals', icon: Gift },
