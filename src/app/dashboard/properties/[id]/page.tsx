@@ -523,7 +523,7 @@ export default function PropertyDetailPage() {
                                 </p>
                                 <Button className="mt-6" onClick={handleGenerateTour} disabled={isGeneratingTour || property.images.length === 0}>
                                     <Orbit className="mr-2 h-4 w-4" />
-                                    Generate Tour with RICOH 360
+                                    Submit for Rendering
                                 </Button>
                                 {property.images.length === 0 && <p className="text-xs text-destructive mt-2">Please upload at least one 360° image to generate a tour.</p>}
                             </>

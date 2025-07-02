@@ -244,14 +244,14 @@ export default function PropertyImageUploader({ property, onGenerateTour, isGene
                         ) : (
                         <Orbit className="mr-2 h-5 w-5" />
                         )}
-                        Generate 360° Tour
+                        Submit for Rendering
                     </Button>
                 </AlertDialogTrigger>
                 <AlertDialogContent>
                     <AlertDialogHeader>
-                        <AlertDialogTitle>Generate Virtual Tour?</AlertDialogTitle>
+                        <AlertDialogTitle>Submit for Rendering?</AlertDialogTitle>
                         <AlertDialogDescription>
-                        This will submit your uploaded images to the RICOH 360 service to create a virtual tour. This process may take a few minutes. Are you sure you want to proceed?
+                        This will submit your uploaded images for rendering to create a virtual tour. This process may take a few minutes. Are you sure you want to proceed?
                         </AlertDialogDescription>
                     </AlertDialogHeader>
                     <AlertDialogFooter>
