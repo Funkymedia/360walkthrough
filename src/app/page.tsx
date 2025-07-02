@@ -2,23 +2,14 @@ import Link from 'next/link';
 import Image from 'next/image';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { UploadCloud, Sparkles, Building, PanelTop, Check, Orbit, Camera, FileCheck } from 'lucide-react';
-import Logo from '@/components/Logo';
+import { UploadCloud, Sparkles, PanelTop, Check, Orbit, Camera, FileCheck } from 'lucide-react';
+import PublicHeader from '@/components/public-header';
+import PublicFooter from '@/components/public-footer';
 
 export default function LandingPage() {
   return (
     <div className="flex flex-col min-h-screen">
-      <header className="container mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
-        <Logo />
-        <nav className="flex items-center gap-4">
-          <Button variant="ghost" asChild>
-            <Link href="/login">Log In</Link>
-          </Button>
-          <Button asChild>
-            <Link href="/signup">Sign Up</Link>
-          </Button>
-        </nav>
-      </header>
+      <PublicHeader />
 
       <main className="flex-grow">
         <section className="relative py-20 md:py-32">
@@ -269,12 +260,7 @@ export default function LandingPage() {
         </section>
       </main>
 
-      <footer className="bg-card border-t">
-        <div className="container mx-auto py-6 px-4 sm:px-6 lg:px-8 text-center text-muted-foreground">
-          <p>&copy; {new Date().getFullYear()} 360 Walkthrough. All rights reserved.</p>
-          <p className="mt-2 text-sm">Made with ❤️ by Funky Media Agency</p>
-        </div>
-      </footer>
+      <PublicFooter />
     </div>
   );
 }
