@@ -29,7 +29,7 @@ export default function FloorPlanUploader({ propertyId, onUploadSuccess }: Floor
     }
   };
 
-  const handleUpload = () => {
+  const handleUpload = async () => {
     if (!file || !name.trim()) {
         toast({
             variant: 'destructive',
@@ -40,19 +40,16 @@ export default function FloorPlanUploader({ propertyId, onUploadSuccess }: Floor
     };
 
     setIsUploading(true);
-    addFloorPlan(propertyId, { name, file });
+    await addFloorPlan(propertyId, { name, file });
     
-    // Mock upload time
-    setTimeout(() => {
-      setIsUploading(false);
-      toast({
-        title: 'Success!',
-        description: `Floor plan "${name}" uploaded successfully.`,
-      });
-      setFile(null);
-      setName('');
-      onUploadSuccess?.();
-    }, 1500);
+    setIsUploading(false);
+    toast({
+      title: 'Success!',
+      description: `Floor plan "${name}" uploaded successfully.`,
+    });
+    setFile(null);
+    setName('');
+    onUploadSuccess?.();
   };
 
   if (file) {

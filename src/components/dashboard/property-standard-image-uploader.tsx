@@ -24,16 +24,6 @@ import {
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
 
-const fileToDataUrl = (file: File): Promise<string> => {
-    return new Promise((resolve, reject) => {
-        const reader = new FileReader();
-        reader.onload = () => resolve(reader.result as string);
-        reader.onerror = reject;
-        reader.readAsDataURL(file);
-    });
-};
-
-
 export default function PropertyStandardImageUploader({ property }: { property: Property }) {
     const { addStandardImage, updateStandardImage, deleteStandardImage } = useProperties();
     const [isProcessing, setIsProcessing] = useState<Record<string, boolean>>({});
@@ -62,9 +52,8 @@ export default function PropertyStandardImageUploader({ property }: { property: 
         setIsProcessing((prev) => ({...prev, [image.id]: true}));
 
         try {
-            const dataUrl = await fileToDataUrl(await (await fetch(image.url)).blob());
             const result = await removeImageObjects({
-                photoDataUri: dataUrl,
+                photoDataUri: image.url,
                 instructions: image.instructions,
             });
 

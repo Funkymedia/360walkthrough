@@ -4,16 +4,17 @@ import { createContext, useState, useContext, ReactNode } from 'react';
 import { mockProperties } from '@/lib/data';
 import type { Property, FloorPlan, PropertyImage, StandardPropertyImage } from '@/lib/types';
 import type { PropertyFormValues } from '@/components/dashboard/property-form';
+import { fileToDataUrl } from '@/lib/utils';
 
 export type FloorPlanFormValues = { name: string; file: File };
 
 interface PropertiesContextType {
     properties: Property[];
-    addProperty: (propertyData: PropertyFormValues) => void;
-    updateProperty: (propertyId: string, propertyData: PropertyFormValues) => void;
+    addProperty: (propertyData: PropertyFormValues) => Promise<void>;
+    updateProperty: (propertyId: string, propertyData: PropertyFormValues) => Promise<void>;
     updateTourUrl: (propertyId: string, tourUrl: string) => void;
     importProperties: (newProperties: Property[]) => void;
-    addFloorPlan: (propertyId: string, floorPlanData: FloorPlanFormValues) => void;
+    addFloorPlan: (propertyId: string, floorPlanData: FloorPlanFormValues) => Promise<void>;
     deleteFloorPlan: (propertyId: string, floorPlanId: string) => void;
     addImage: (propertyId: string, imageFile: File) => Promise<PropertyImage>;
     updateImage: (propertyId: string, updatedImage: PropertyImage) => void;
@@ -28,7 +29,7 @@ const PropertiesContext = createContext<PropertiesContextType | undefined>(undef
 export function PropertiesProvider({ children }: { children: ReactNode }) {
     const [properties, setProperties] = useState<Property[]>(mockProperties);
 
-    const addProperty = (data: PropertyFormValues) => {
+    const addProperty = async (data: PropertyFormValues) => {
         const newProperty: Property = {
             id: `prop-${Date.now()}`,
             name: data.name,
@@ -42,23 +43,24 @@ export function PropertiesProvider({ children }: { children: ReactNode }) {
             images: [],
             standardImages: [],
             floorPlans: [],
-            brandingLogoUrl: data.brandingLogo?.[0] ? URL.createObjectURL(data.brandingLogo[0]) : undefined,
-            heroImageUrl: data.heroImage?.[0] ? URL.createObjectURL(data.heroImage[0]) : undefined,
+            brandingLogoUrl: data.brandingLogo?.[0] ? await fileToDataUrl(data.brandingLogo[0]) : undefined,
+            heroImageUrl: data.heroImage?.[0] ? await fileToDataUrl(data.heroImage[0]) : undefined,
         };
         setProperties(prev => [newProperty, ...prev]);
     };
 
-    const updateProperty = (propertyId: string, data: PropertyFormValues) => {
-        setProperties(prev =>
-            prev.map(p => {
-                if (p.id === propertyId) {
-                    const newLogoFile = data.brandingLogo?.[0];
-                    const newLogoUrl = newLogoFile ? URL.createObjectURL(newLogoFile) : p.brandingLogoUrl;
-                    const newHeroImageFile = data.heroImage?.[0];
-                    const newHeroImageUrl = newHeroImageFile ? URL.createObjectURL(newHeroImageFile) : p.heroImageUrl;
+    const updateProperty = async (propertyId: string, data: PropertyFormValues) => {
+        const p = properties.find(prop => prop.id === propertyId);
+        if (!p) return;
 
+        const newLogoUrl = data.brandingLogo?.[0] ? await fileToDataUrl(data.brandingLogo[0]) : p.brandingLogoUrl;
+        const newHeroImageUrl = data.heroImage?.[0] ? await fileToDataUrl(data.heroImage[0]) : p.heroImageUrl;
+
+        setProperties(prev =>
+            prev.map(prop => {
+                if (prop.id === propertyId) {
                     return {
-                        ...p,
+                        ...prop,
                         name: data.name,
                         address: data.address,
                         description: data.description,
@@ -71,7 +73,7 @@ export function PropertiesProvider({ children }: { children: ReactNode }) {
                         heroImageUrl: newHeroImageUrl,
                     };
                 }
-                return p;
+                return prop;
             })
         );
     };
@@ -95,11 +97,11 @@ export function PropertiesProvider({ children }: { children: ReactNode }) {
         });
     };
 
-    const addFloorPlan = (propertyId: string, floorPlanData: FloorPlanFormValues) => {
+    const addFloorPlan = async (propertyId: string, floorPlanData: FloorPlanFormValues) => {
         const newFloorPlan: FloorPlan = {
             id: `fp-${Date.now()}`,
             name: floorPlanData.name,
-            url: URL.createObjectURL(floorPlanData.file),
+            url: await fileToDataUrl(floorPlanData.file),
         };
 
         setProperties(prev => 
@@ -129,29 +131,27 @@ export function PropertiesProvider({ children }: { children: ReactNode }) {
         );
     };
 
-    const addImage = (propertyId: string, imageFile: File): Promise<PropertyImage> => {
-        return new Promise((resolve) => {
-          const newImage: PropertyImage = {
-            id: `img-${Date.now()}`,
-            url: URL.createObjectURL(imageFile),
-            tags: [],
-            paths: [],
-          };
-    
-          setProperties((prev) =>
-            prev.map((p) => {
-              if (p.id === propertyId) {
-                return {
-                  ...p,
-                  images: [...p.images, newImage],
-                };
-              }
-              return p;
-            })
-          );
-          resolve(newImage);
-        });
-      };
+    const addImage = async (propertyId: string, imageFile: File): Promise<PropertyImage> => {
+        const newImage: PropertyImage = {
+        id: `img-${Date.now()}`,
+        url: await fileToDataUrl(imageFile),
+        tags: [],
+        paths: [],
+        };
+
+        setProperties((prev) =>
+        prev.map((p) => {
+            if (p.id === propertyId) {
+            return {
+                ...p,
+                images: [...p.images, newImage],
+            };
+            }
+            return p;
+        })
+        );
+        return newImage;
+    };
     
       const updateImage = (propertyId: string, updatedImage: PropertyImage) => {
         setProperties((prev) =>
@@ -181,26 +181,24 @@ export function PropertiesProvider({ children }: { children: ReactNode }) {
         );
       };
 
-    const addStandardImage = (propertyId: string, imageFile: File): Promise<StandardPropertyImage> => {
-        return new Promise((resolve) => {
-            const newImage: StandardPropertyImage = {
-                id: `s-img-${Date.now()}`,
-                name: imageFile.name,
-                url: URL.createObjectURL(imageFile),
-            };
-            setProperties((prev) =>
-                prev.map((p) => {
-                    if (p.id === propertyId) {
-                        return {
-                            ...p,
-                            standardImages: [...(p.standardImages || []), newImage],
-                        };
-                    }
-                    return p;
-                })
-            );
-            resolve(newImage);
-        });
+    const addStandardImage = async (propertyId: string, imageFile: File): Promise<StandardPropertyImage> => {
+        const newImage: StandardPropertyImage = {
+            id: `s-img-${Date.now()}`,
+            name: imageFile.name,
+            url: await fileToDataUrl(imageFile),
+        };
+        setProperties((prev) =>
+            prev.map((p) => {
+                if (p.id === propertyId) {
+                    return {
+                        ...p,
+                        standardImages: [...(p.standardImages || []), newImage],
+                    };
+                }
+                return p;
+            })
+        );
+        return newImage;
     };
 
     const updateStandardImage = (propertyId: string, updatedImage: StandardPropertyImage) => {

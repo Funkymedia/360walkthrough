@@ -52,25 +52,22 @@ export default function PropertyForm({ initialData }: PropertyFormProps) {
     },
   });
 
-  const onSubmit = (data: PropertyFormValues) => {
+  const onSubmit = async (data: PropertyFormValues) => {
     setIsLoading(true);
     if (initialData) {
-      updateProperty(initialData.id, data);
+      await updateProperty(initialData.id, data);
     } else {
-      addProperty(data);
+      await addProperty(data);
     }
 
-    // Mock API delay
-    setTimeout(() => {
-      setIsLoading(false);
-      // Redirect to the dashboard to see the new property in the list.
-      if (initialData) {
-        router.push(`/dashboard/properties/${initialData.id}`);
-        router.refresh();
-      } else {
-        router.push('/dashboard/properties');
-      }
-    }, 1500);
+    setIsLoading(false);
+    // Redirect to the dashboard to see the new property in the list.
+    if (initialData) {
+      router.push(`/dashboard/properties/${initialData.id}`);
+      router.refresh();
+    } else {
+      router.push('/dashboard/properties');
+    }
   };
 
   return (
