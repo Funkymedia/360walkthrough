@@ -50,11 +50,8 @@ export function PropertiesProvider({ children }: { children: ReactNode }) {
     };
 
     const updateProperty = async (propertyId: string, data: PropertyFormValues) => {
-        const p = properties.find(prop => prop.id === propertyId);
-        if (!p) return;
-
-        const newLogoUrl = data.brandingLogo?.[0] ? await fileToDataUrl(data.brandingLogo[0]) : p.brandingLogoUrl;
-        const newHeroImageUrl = data.heroImage?.[0] ? await fileToDataUrl(data.heroImage[0]) : p.heroImageUrl;
+        const newLogoUrl = data.brandingLogo?.[0] ? await fileToDataUrl(data.brandingLogo[0]) : undefined;
+        const newHeroImageUrl = data.heroImage?.[0] ? await fileToDataUrl(data.heroImage[0]) : undefined;
 
         setProperties(prev =>
             prev.map(prop => {
@@ -69,8 +66,8 @@ export function PropertiesProvider({ children }: { children: ReactNode }) {
                             email: data.contactEmail,
                             phone: data.contactPhone,
                         },
-                        brandingLogoUrl: newLogoUrl,
-                        heroImageUrl: newHeroImageUrl,
+                        brandingLogoUrl: newLogoUrl ?? prop.brandingLogoUrl,
+                        heroImageUrl: newHeroImageUrl ?? prop.heroImageUrl,
                     };
                 }
                 return prop;
